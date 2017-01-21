@@ -20,7 +20,7 @@ namespace AORNet
         public unsafe delegate void THandleData([MarshalAs(UnmanagedType.BStr)] string data);
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall, SetLastError = true)]
-        public unsafe delegate void TSendData([MarshalAs(UnmanagedType.BStr)] ref string data);
+        public unsafe delegate void TSendData([MarshalAs(UnmanagedType.LPWStr)] string data);
 
         public static readonly THandleData PHandleData = (THandleData)Marshal.GetDelegateForFunctionPointer(new IntPtr(0x655B10), typeof(THandleData));
         public static readonly TSendData PSendData = (TSendData)Marshal.GetDelegateForFunctionPointer(new IntPtr(0x6A21C0), typeof(TSendData));
@@ -46,9 +46,9 @@ namespace AORNet
         {
             try
             {
-                ReceiveHook = LocalHook.Create(new IntPtr(0x655B10), new THandleData(HKHandleData), this);
+                ReceiveHook = LocalHook.Create(new IntPtr(0x655B10), new THandleData(hkHandleData), this);
                 ReceiveHook.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
-                ReceiveHook = LocalHook.Create(new IntPtr(0x6A21C0), new TSendData(HKSendData), this);
+                ReceiveHook = LocalHook.Create(new IntPtr(0x6A21C0), new TSendData(hkSendData), this);
                 ReceiveHook.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
             }
             catch (Exception ex)
@@ -63,11 +63,13 @@ namespace AORNet
         }
 
 
-        static unsafe void HKHandleData([MarshalAs(UnmanagedType.BStr)] string data)
+
+
+        static unsafe void hkHandleData([MarshalAs(UnmanagedType.BStr)] string data)
         {
             try
             {
-                ((Main)HookRuntimeInfo.Callback).Interface.Receive("[recv=" + data + "]");
+                ((Main)HookRuntimeInfo.Callback).Interface.Receive(string.Format("[data=" + data + "]"));
                 PHandleData(data);
             }
             catch (Exception ex)
@@ -77,19 +79,22 @@ namespace AORNet
             }
         }
 
-        static unsafe void HKSendData([MarshalAs(UnmanagedType.BStr)] ref string data)
+        static unsafe void hkSendData([MarshalAs(UnmanagedType.LPWStr)] string data)
         {
             try
             {
-                ((Main)HookRuntimeInfo.Callback).Interface.Receive("[send=" + data + "]");
-                PSendData(ref data);
+                ((Main)HookRuntimeInfo.Callback).Interface.Receive("--------------------------------------");
+                ((Main)HookRuntimeInfo.Callback).Interface.Receive(string.Format("[data=" + data + "]"));
+                PSendData(data);
             }
             catch (Exception ex)
             {
                 ((Main)HookRuntimeInfo.Callback).Interface.ErrorHandler(ex);
-                PSendData(ref data);
+                PSendData(data);
             }
         }
- 
+
+
+    
     }
 }
