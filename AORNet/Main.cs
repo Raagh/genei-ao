@@ -7,14 +7,15 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using AOTest;
+using GeneiAO.Model;
+
 
 namespace AORNet
 {
     public class Main : IEntryPoint
     {
-        LocalHook ReceiveHook;
-
+        private LocalHook HandleHook;
+        private LocalHook SendHook;
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall, SetLastError = true)]
         public unsafe delegate void THandleData([MarshalAs(UnmanagedType.BStr)] string data);
@@ -26,13 +27,13 @@ namespace AORNet
         public static readonly TSendData PSendData = (TSendData)Marshal.GetDelegateForFunctionPointer(new IntPtr(0x6A21C0), typeof(TSendData));
 
         static string ChannelName;
-        RemoteMon Interface;
+        RemoteService Interface;
 
         public Main(RemoteHooking.IContext InContext, String InChannelName)
         {
             try
             {
-                Interface = RemoteHooking.IpcConnectClient<RemoteMon>(InChannelName);
+                Interface = RemoteHooking.IpcConnectClient<RemoteService>(InChannelName);
                 ChannelName = InChannelName;
                 Interface.IsInstalled(RemoteHooking.GetCurrentProcessId());
             }
@@ -46,10 +47,10 @@ namespace AORNet
         {
             try
             {
-                ReceiveHook = LocalHook.Create(new IntPtr(0x655B10), new THandleData(HKHandleData), this);
-                ReceiveHook.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
-                ReceiveHook = LocalHook.Create(new IntPtr(0x6A21C0), new TSendData(HKSendData), this);
-                ReceiveHook.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
+                HandleHook = LocalHook.Create(new IntPtr(0x655B10), new THandleData(HKHandleData), this);
+                HandleHook.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
+                SendHook = LocalHook.Create(new IntPtr(0x6A21C0), new TSendData(HKSendData), this);
+                SendHook.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
             }
             catch (Exception ex)
             {

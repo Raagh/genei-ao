@@ -1,0 +1,19 @@
+﻿<Window x:Class="GeneiAO.View.Main"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GeneiAO.View"
+        xmlns:viewModel="clr-namespace:GeneiAO.ViewModel"
+        Title="GeneiAO" Height="350" Width="525">
+    <Window.DataContext>
+        <viewModel:MainViewModel></viewModel:MainViewModel>
+    </Window.DataContext>
+
+    <Grid>
+        <Label x:Name="ErrorLabel" Content="{Binding ErrorMessage}" HorizontalAlignment="Center"  VerticalAlignment="Center" RenderTransformOrigin="-2.94,-1.197" Height="110" Width="313"/>
+        <Button x:Name="StartButton" Content="Start" HorizontalAlignment="Left" Margin="218,280,0,0" VerticalAlignment="Top" Width="75" Command="{Binding HookCommand}"/>
+
+
+    </Grid>
+</Window>

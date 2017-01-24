@@ -50,22 +50,22 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="EasyHook\EasyHook32.dll">
+    <Content Include="Libraries\EasyHook32.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="EasyHook\EasyHook32Svc.exe">
+    <Content Include="Libraries\EasyHook32Svc.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="EasyHook\EasyHook64.dll">
+    <Content Include="Libraries\EasyHook64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="EasyHook\EasyHook64Svc.exe">
+    <Content Include="Libraries\EasyHook64Svc.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="EasyHook\EasyLoad32.dll">
+    <Content Include="Libraries\EasyLoad32.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="EasyHook\EasyLoad64.dll">
+    <Content Include="Libraries\EasyLoad64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -73,9 +73,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AOTest\AOTest.csproj">
-      <Project>{25a74e42-7a0d-4bfd-aa0f-518213e990c8}</Project>
-      <Name>AOTest</Name>
+    <ProjectReference Include="..\GeneiAO\GeneiAO.csproj">
+      <Project>{aab4c83a-d6f1-4f0b-825e-f6e3b7ac0c02}</Project>
+      <Name>GeneiAO</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
