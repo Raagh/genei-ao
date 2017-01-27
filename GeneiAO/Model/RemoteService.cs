@@ -12,8 +12,13 @@ namespace GeneiAO.Model
 {
     public class RemoteService : MarshalByRefObject
     {
+
+        MainModel model = new MainModel();
+
         public void IsInstalled(int InClientPID)
         {
+            model.Message = "Client " + InClientPID + "Hooked Succesfully";
+            //MessageBox.Show("Client " + InClientPID + " - Hooked Succesfully");
         }
 
         public void Receive(string message)

@@ -19,29 +19,26 @@ namespace GeneiAO.ViewModel
     public class MainViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-
+        public RelayCommand HookCommand { get; }
+        public MainModel MainModel = new MainModel();
         private string ChannelName = null;
-
         private string currdir = "D:\\Development\\GitHub\\genei-ao\\AORNet\\bin\\Debug" + "\\";
-
-        public MainViewModel()
+        public string Message
         {
-            HookCommand = new RelayCommand(async () => await Hook());
-        }
-
-        private string error;
-
-        public string ErrorMessage
-        {
-            get { return error; }
+            get { return MainModel.Message; }
             set
             {
-                error = value;
+                MainModel.Message = value;
                 OnPropertyChanged();
             }
         }
 
-        public RelayCommand HookCommand { get; }
+        public MainViewModel()
+        {
+            HookCommand = new RelayCommand(async () => await Hook());
+            MainModel.PropertyChanged += (s, e) =>{ OnPropertyChanged();};
+        }
+
         void OnPropertyChanged([CallerMemberName] string name = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
@@ -63,15 +60,15 @@ namespace GeneiAO.ViewModel
                 }
                 if (processid == -1)
                 {
-                    ErrorMessage = "No process exists with that name!";
+                    //Message = "No process exists with that name!";
                     return;
                 }
                 RemoteHooking.Inject(processid, InjectionOptions.DoNotRequireStrongName, currdir + "AORNet.dll",currdir + "AORNet.dll", new Object[] { ChannelName });
-                ErrorMessage = "Dll injected succesfully!";
+                //Message = "Dll injected succesfully!";
             }
             catch (Exception ExtInfo)
             {
-                ErrorMessage = "There was an error while connecting to target:\r\n" + ExtInfo.ToString();
+                //Message = "There was an error while connecting to target:\r\n" + ExtInfo.ToString();
             }
 
             //while (true)

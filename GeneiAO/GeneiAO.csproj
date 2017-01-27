@@ -88,6 +88,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Model\MainModel.cs" />
     <Compile Include="Model\RemoteService.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="View\Main.xaml.cs">
