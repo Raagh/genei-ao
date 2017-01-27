@@ -20,15 +20,14 @@ namespace GeneiAO.ViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public RelayCommand HookCommand { get; }
-        public MainModel MainModel = new MainModel();
         private string ChannelName = null;
         private string currdir = "D:\\Development\\GitHub\\genei-ao\\AORNet\\bin\\Debug" + "\\";
         public string Message
         {
-            get { return MainModel.Message; }
+            get { return MainModel.Instance.Message; }
             set
             {
-                MainModel.Message = value;
+                MainModel.Instance.Message = value;
                 OnPropertyChanged();
             }
         }

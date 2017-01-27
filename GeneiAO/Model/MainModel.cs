@@ -10,12 +10,27 @@ namespace GeneiAO.Model
 {
     public class MainModel : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        private string _message;
 
+        private static MainModel _instance;
+        private string _message;
+        public event PropertyChangedEventHandler PropertyChanged;
+      
         void OnPropertyChanged([CallerMemberName] string name = "")
         {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+
+        public static MainModel Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    return _instance = new MainModel();
+                }
+                return _instance;
+            }
         }
 
         public string Message
