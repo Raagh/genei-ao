@@ -20,8 +20,7 @@ namespace GeneiAO.ViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public RelayCommand HookCommand { get; }
-        private string ChannelName = null;
-        private string currdir = "D:\\Development\\GitHub\\genei-ao\\AORNet\\bin\\Debug" + "\\";
+
         public string Message
         {
             get { return MainModel.Instance.Message; }
@@ -35,7 +34,7 @@ namespace GeneiAO.ViewModel
         public MainViewModel()
         {
             HookCommand = new RelayCommand(async () => await Hook());
-            MainModel.PropertyChanged += (s, e) =>{ OnPropertyChanged();};
+            MainModel.Instance.PropertyChanged += (s, e) =>{ OnPropertyChanged(MainModel.Instance.LatestProperty);};
         }
 
         void OnPropertyChanged([CallerMemberName] string name = "")
@@ -43,37 +42,28 @@ namespace GeneiAO.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        async Task Hook()
+        private async Task Hook()
         {
             try
             {
-                RemoteHooking.IpcCreateServer<RemoteService>(ref ChannelName, WellKnownObjectMode.Singleton);
-                int processid = -1;
-
-                string w = "FuriusAO";
-
-                foreach (Process p in Process.GetProcessesByName(w))
+                RemoteHooking.IpcCreateServer<RemoteService>(ref Defaults.ChannelName, WellKnownObjectMode.Singleton);
+                int processID = -1;
+                foreach (Process p in Process.GetProcessesByName("FuriusAO"))
                 {
-                    processid = p.Id;
+                    processID = p.Id;
                     break;
                 }
-                if (processid == -1)
+                if (processID == -1)
                 {
-                    //Message = "No process exists with that name!";
+                    Message = "No process exists with that name!";
                     return;
                 }
-                RemoteHooking.Inject(processid, InjectionOptions.DoNotRequireStrongName, currdir + "AORNet.dll",currdir + "AORNet.dll", new Object[] { ChannelName });
-                //Message = "Dll injected succesfully!";
+                RemoteHooking.Inject(processID, InjectionOptions.DoNotRequireStrongName, Defaults.CurrentDir + "AORNet.dll",Defaults.CurrentDir + "AORNet.dll", new Object[] { Defaults.ChannelName });
             }
             catch (Exception ExtInfo)
             {
-                //Message = "There was an error while connecting to target:\r\n" + ExtInfo.ToString();
+                Message = "There was an error while connecting to target:\r\n" + ExtInfo.ToString();
             }
-
-            //while (true)
-            //{
-            //    Thread.Sleep(1000);
-            //}
         }
 
     }

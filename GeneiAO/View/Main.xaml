@@ -11,9 +11,7 @@
     </Window.DataContext>
 
     <Grid>
-        <Label x:Name="ErrorLabel" Content="{Binding Message}" HorizontalAlignment="Center"  VerticalAlignment="Center" RenderTransformOrigin="-2.94,-1.197" Height="110" Width="313"/>
+        <Label x:Name="StatusLabel" Content="{Binding Message}" HorizontalAlignment="Center"  VerticalAlignment="Center" RenderTransformOrigin="-2.94,-1.197" Height="33" Width="321" Margin="98,26,98,260"/>
         <Button x:Name="StartButton" Content="Start" HorizontalAlignment="Left" Margin="218,280,0,0" VerticalAlignment="Top" Width="75" Command="{Binding HookCommand}"/>
-
-
-    </Grid>
+   </Grid>
 </Window>

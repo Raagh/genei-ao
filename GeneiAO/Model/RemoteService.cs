@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -12,19 +13,19 @@ namespace GeneiAO.Model
 {
     public class RemoteService : MarshalByRefObject
     {
-        public void IsInstalled(int InClientPID)
+        public void IsInstalled(int inClientPid)
         {
-            MainModel.Instance.Message = "Client " + InClientPID + "Hooked Succesfully";
+            MainModel.Instance.Message = "Client " + inClientPid + " - Hooked Succesfully";
         }
 
         public void Receive(string message)
         {
-
+            
         }
 
-        public void ErrorHandler(Exception ex)
+        public void ErrorHandler(Exception dllException)
         {
-
+            throw dllException;
         }
 
     }
