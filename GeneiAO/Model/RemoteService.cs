@@ -13,9 +13,9 @@ namespace GeneiAO.Model
 {
     public class RemoteService : MarshalByRefObject
     {
-        public void IsInstalled(int inClientPid)
-        {
-            MainModel.Instance.Message = "Client " + inClientPid + " - Hooked Succesfully";
+        public void IsInstalled(bool isInstalled)
+        {          
+            MainModel.Instance.Status = isInstalled;
         }
 
         public void Receive(string message)
@@ -25,6 +25,7 @@ namespace GeneiAO.Model
 
         public void ErrorHandler(Exception dllException)
         {
+            //MainModel.Instance.Error = "An error ocurred in the dll client.";
             throw dllException;
         }
 

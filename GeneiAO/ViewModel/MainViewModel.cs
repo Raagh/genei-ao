@@ -18,53 +18,76 @@ namespace GeneiAO.ViewModel
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        public RelayCommand HookCommand { get; }
-
-        public string Message
+        public MainViewModel()
         {
-            get { return MainModel.Instance.Message; }
+            HookCommand = new RelayCommand(async () => await Hook());
+            MainModel.Instance.PropertyChanged += (s, e) => { OnPropertyChanged(MainModel.Instance.LatestPropertyExecuted); };
+        }
+
+        #region -- Public Properties --
+
+        public string Error
+        {
+            get { return MainModel.Instance.Error; }
             set
             {
-                MainModel.Instance.Message = value;
+                MainModel.Instance.Error = value;
                 OnPropertyChanged();
             }
         }
 
-        public MainViewModel()
+        public bool Status
         {
-            HookCommand = new RelayCommand(async () => await Hook());
-            MainModel.Instance.PropertyChanged += (s, e) =>{ OnPropertyChanged(MainModel.Instance.LatestProperty);};
+            get { return MainModel.Instance.Status; }
+            set
+            {
+                MainModel.Instance.Status = value;
+                OnPropertyChanged();
+            }
         }
+        #endregion
+
+        #region -- Events --
+        public event PropertyChangedEventHandler PropertyChanged;
 
         void OnPropertyChanged([CallerMemberName] string name = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
+        #endregion
+
+        #region -- Commands --
+
+        public RelayCommand HookCommand { get; }
+
         private async Task Hook()
         {
             try
             {
-                RemoteHooking.IpcCreateServer<RemoteService>(ref Defaults.ChannelName, WellKnownObjectMode.Singleton);
+                RemoteHooking.IpcCreateServer<MainModel>(ref Defaults.CHANNEL_NAME, WellKnownObjectMode.Singleton);
                 int processID = -1;
-                foreach (Process p in Process.GetProcessesByName("FuriusAO"))
+                foreach (Process p in Process.GetProcessesByName(Defaults.PROCESS_NAME))
                 {
                     processID = p.Id;
                     break;
                 }
                 if (processID == -1)
                 {
-                    Message = "No process exists with that name!";
+                    Error = "No process exists with that name!";
                     return;
                 }
-                RemoteHooking.Inject(processID, InjectionOptions.DoNotRequireStrongName, Defaults.CurrentDir + "AORNet.dll",Defaults.CurrentDir + "AORNet.dll", new Object[] { Defaults.ChannelName });
+                RemoteHooking.Inject(processID, InjectionOptions.DoNotRequireStrongName, Defaults.CURRENT_DIR + "AORNet.dll", Defaults.CURRENT_DIR + "AORNet.dll", new Object[] { Defaults.CHANNEL_NAME });
             }
             catch (Exception ExtInfo)
             {
-                Message = "There was an error while connecting to target:\r\n" + ExtInfo.ToString();
+                Error = "There was an error while connecting to target:\r\n" + ExtInfo.ToString();
             }
         }
+
+        #endregion
+
+
 
     }
 }

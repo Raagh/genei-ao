@@ -19,7 +19,8 @@ namespace AORNet
         private LocalHook SendHook;
         private LocalHook LoopHook;
         public static string ChannelName;
-        public readonly RemoteService Interface;
+        //public readonly RemoteService Interface;
+        public readonly MainModel Interface;
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall, SetLastError = true)]
         public unsafe delegate void THandleData([MarshalAs(UnmanagedType.BStr)] string data);
@@ -38,13 +39,16 @@ namespace AORNet
         {
             try
             {
-                Interface = RemoteHooking.IpcConnectClient<RemoteService>(inChannelName);
+                Interface = RemoteHooking.IpcConnectClient<MainModel>(inChannelName);
                 ChannelName = inChannelName;
-                Interface.IsInstalled(RemoteHooking.GetCurrentProcessId());
+                //RemoteHooking.GetCurrentProcessId()
+                //Interface.IsInstalled(true);
+                Interface.Status = true;
             }
             catch (Exception ex)
             {
-                Interface.ErrorHandler(ex);
+                //Interface.ErrorHandler(ex);
+                Interface.Error = ex.ToString();
             }
         }
 
@@ -61,7 +65,8 @@ namespace AORNet
             }
             catch (Exception ex)
             {
-                Interface.ErrorHandler(ex);
+                //Interface.ErrorHandler(ex);
+                Interface.Error = ex.ToString();
             }
         }
 
@@ -70,11 +75,11 @@ namespace AORNet
         {
             try
             {
-                ((Main)HookRuntimeInfo.Callback).Interface.Receive("Handle= " + data );               
+                //(Main)HookRuntimeInfo.Callback).Interface.Receive("Handle= " + data );               
             }
             catch (Exception ex)
             {
-                ((Main)HookRuntimeInfo.Callback).Interface.ErrorHandler(ex);
+                //((Main)HookRuntimeInfo.Callback).Interface.ErrorHandler(ex);
             }
             finally
             {
@@ -86,12 +91,12 @@ namespace AORNet
         {
             try
             {
-                ((Main)HookRuntimeInfo.Callback).Interface.Receive("Send=" + data );
+                //((Main)HookRuntimeInfo.Callback).Interface.Receive("Send=" + data );
                 
             }
             catch (Exception ex)
             {
-                ((Main)HookRuntimeInfo.Callback).Interface.ErrorHandler(ex);
+                //((Main)HookRuntimeInfo.Callback).Interface.ErrorHandler(ex);
             }
             finally
             {
@@ -107,7 +112,7 @@ namespace AORNet
             }
             catch (Exception ex)
             {
-                ((Main)HookRuntimeInfo.Callback).Interface.ErrorHandler(ex);
+                //((Main)HookRuntimeInfo.Callback).Interface.ErrorHandler(ex);
             }
             finally
             {
