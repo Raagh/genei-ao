@@ -15,6 +15,8 @@ namespace AORNet
 {
     public class Main : IEntryPoint
     {
+        #region -- Instance Properties --
+
         private LocalHook HandleHook;
         private LocalHook SendHook;
         private LocalHook LoopHook;
@@ -22,6 +24,17 @@ namespace AORNet
         //public readonly RemoteService Interface;
         public readonly MainModel Interface;
 
+        #endregion
+
+        #region -- Static Properties --
+
+        private static IntPtr HandleAddress = new IntPtr(0x64E050);
+        private static IntPtr SendAddress = new IntPtr(0x69A0D0);
+        private static IntPtr LoopAddress = LocalHook.GetProcAddress("MSVBVM60.DLL", "rtcDoEvents");
+
+        #endregion
+
+        #region -- Function Pointers --
         [UnmanagedFunctionPointer(CallingConvention.StdCall, SetLastError = true)]
         public unsafe delegate void THandleData([MarshalAs(UnmanagedType.BStr)] string data);
 
@@ -31,9 +44,12 @@ namespace AORNet
         [UnmanagedFunctionPointer(CallingConvention.StdCall, SetLastError = true)]
         public unsafe delegate void TLoop();
 
-        public static readonly THandleData PHandleData = (THandleData)Marshal.GetDelegateForFunctionPointer(new IntPtr(0x64E050), typeof(THandleData));
-        public static readonly TSendData PSendData = (TSendData)Marshal.GetDelegateForFunctionPointer(new IntPtr(0x69A0D0), typeof(TSendData));
-        public static readonly TLoop PLoop = (TLoop) Marshal.GetDelegateForFunctionPointer(LocalHook.GetProcAddress("MSVBVM60.DLL","rtcDoEvents"), typeof(TLoop));
+        public static readonly THandleData PHandleData = (THandleData)Marshal.GetDelegateForFunctionPointer(HandleAddress, typeof(THandleData));
+        public static readonly TSendData PSendData = (TSendData)Marshal.GetDelegateForFunctionPointer(SendAddress, typeof(TSendData));
+        public static readonly TLoop PLoop = (TLoop)Marshal.GetDelegateForFunctionPointer(LoopAddress, typeof(TLoop));
+
+        #endregion
+
 
         public Main(RemoteHooking.IContext inContext, String inChannelName)
         {
@@ -56,11 +72,11 @@ namespace AORNet
         {
             try
             {
-                HandleHook = LocalHook.Create(new IntPtr(0x64E050), new THandleData(HKHandleData), this);
+                HandleHook = LocalHook.Create(HandleAddress, new THandleData(HKHandleData), this);
                 HandleHook.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
-                SendHook = LocalHook.Create(new IntPtr(0x69A0D0), new TSendData(HKSendData), this);
+                SendHook = LocalHook.Create(SendAddress, new TSendData(HKSendData), this);
                 SendHook.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
-                LoopHook = LocalHook.Create(LocalHook.GetProcAddress("MSVBVM60.DLL", "rtcDoEvents"), new TLoop(HKLoop), this);
+                LoopHook = LocalHook.Create(LoopAddress, new TLoop(HKLoop), this);
                 LoopHook.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
             }
             catch (Exception ex)
@@ -70,7 +86,6 @@ namespace AORNet
             }
         }
 
-
         private static unsafe void HKHandleData([MarshalAs(UnmanagedType.BStr)] string data)
         {
             try
@@ -79,7 +94,7 @@ namespace AORNet
             }
             catch (Exception ex)
             {
-                //((Main)HookRuntimeInfo.Callback).Interface.ErrorHandler(ex);
+                ((Main)HookRuntimeInfo.Callback).Interface.Error = ex.ToString();
             }
             finally
             {
@@ -96,7 +111,7 @@ namespace AORNet
             }
             catch (Exception ex)
             {
-                //((Main)HookRuntimeInfo.Callback).Interface.ErrorHandler(ex);
+                ((Main)HookRuntimeInfo.Callback).Interface.Error = ex.ToString();
             }
             finally
             {
@@ -112,7 +127,7 @@ namespace AORNet
             }
             catch (Exception ex)
             {
-                //((Main)HookRuntimeInfo.Callback).Interface.ErrorHandler(ex);
+                ((Main)HookRuntimeInfo.Callback).Interface.Error = ex.ToString();
             }
             finally
             {

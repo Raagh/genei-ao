@@ -35,7 +35,6 @@ namespace GeneiAO.ViewModel
                 OnPropertyChanged();
             }
         }
-
         public bool Status
         {
             get { return MainModel.Instance.Status; }
@@ -45,6 +44,7 @@ namespace GeneiAO.ViewModel
                 OnPropertyChanged();
             }
         }
+
         #endregion
 
         #region -- Events --
@@ -86,8 +86,6 @@ namespace GeneiAO.ViewModel
         }
 
         #endregion
-
-
 
     }
 }
