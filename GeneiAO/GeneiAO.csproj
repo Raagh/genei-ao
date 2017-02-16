@@ -89,7 +89,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Model\Defaults.cs" />
-    <Compile Include="Model\MainModel.cs" />
     <Compile Include="Model\RemoteService.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="View\Main.xaml.cs">

@@ -15,7 +15,7 @@ namespace GeneiAO.Model
     {
         public void IsInstalled(bool isInstalled)
         {          
-            MainModel.Instance.Status = isInstalled;
+            MainViewModel.Instance.Status = isInstalled;
         }
 
         public void Receive(string message)
@@ -25,8 +25,7 @@ namespace GeneiAO.Model
 
         public void ErrorHandler(Exception dllException)
         {
-            //MainModel.Instance.Error = "An error ocurred in the dll client.";
-            throw dllException;
+            MainViewModel.Instance.Error = "An error ocurred in the dll client." + dllException;
         }
 
     }

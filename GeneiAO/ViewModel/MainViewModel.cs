@@ -18,29 +18,52 @@ namespace GeneiAO.ViewModel
 {
     public class MainViewModel : INotifyPropertyChanged
     {
+        #region -- Instance --
+
         public MainViewModel()
         {
             HookCommand = new RelayCommand(async () => await Hook());
-            MainModel.Instance.PropertyChanged += (s, e) => { OnPropertyChanged(MainModel.Instance.LatestPropertyExecuted); };
+            _instance = this;
         }
+
+        private static MainViewModel _instance;
+
+        public static MainViewModel Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    return _instance = new MainViewModel();
+                }
+                return _instance;
+            }
+        }
+
+        #endregion
+
+        #region -- Private Properties --
+        private bool _status;
+        private string _error;
+        #endregion
 
         #region -- Public Properties --
 
-        public string Error
+        public bool Status
         {
-            get { return MainModel.Instance.Error; }
+            get { return _status; }
             set
             {
-                MainModel.Instance.Error = value;
+                _status = value;
                 OnPropertyChanged();
             }
         }
-        public bool Status
+        public string Error
         {
-            get { return MainModel.Instance.Status; }
+            get { return _error; }
             set
             {
-                MainModel.Instance.Status = value;
+                _error = value;
                 OnPropertyChanged();
             }
         }
@@ -48,6 +71,7 @@ namespace GeneiAO.ViewModel
         #endregion
 
         #region -- Events --
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         void OnPropertyChanged([CallerMemberName] string name = "")
@@ -65,7 +89,7 @@ namespace GeneiAO.ViewModel
         {
             try
             {
-                RemoteHooking.IpcCreateServer<MainModel>(ref Defaults.CHANNEL_NAME, WellKnownObjectMode.Singleton);
+                RemoteHooking.IpcCreateServer<RemoteService>(ref Defaults.CHANNEL_NAME, WellKnownObjectMode.Singleton);
                 int processID = -1;
                 foreach (Process p in Process.GetProcessesByName(Defaults.PROCESS_NAME))
                 {
@@ -74,14 +98,14 @@ namespace GeneiAO.ViewModel
                 }
                 if (processID == -1)
                 {
-                    Error = "No process exists with that name!";
+                    //Error = "No process exists with that name!";
                     return;
                 }
-                RemoteHooking.Inject(processID, InjectionOptions.DoNotRequireStrongName, Defaults.CURRENT_DIR + "AORNet.dll", Defaults.CURRENT_DIR + "AORNet.dll", new Object[] { Defaults.CHANNEL_NAME });
+                RemoteHooking.Inject(processID, InjectionOptions.DoNotRequireStrongName, Defaults.CURRENT_DIR + Defaults.DLL_NAME , Defaults.CURRENT_DIR + Defaults.DLL_NAME, new Object[] { Defaults.CHANNEL_NAME });
             }
             catch (Exception ExtInfo)
             {
-                Error = "There was an error while connecting to target:\r\n" + ExtInfo.ToString();
+               //Error = "There was an error while connecting to target:\r\n" + ExtInfo.ToString();
             }
         }
 

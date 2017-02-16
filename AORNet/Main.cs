@@ -21,70 +21,36 @@ namespace AORNet
         private LocalHook SendHook;
         private LocalHook LoopHook;
         public static string ChannelName;
-        //public readonly RemoteService Interface;
-        public readonly MainModel Interface;
+        public readonly RemoteService Interface;
+
 
         #endregion
 
         #region -- Static Properties --
 
-        private static IntPtr HandleAddress = new IntPtr(0x64E050);
-        private static IntPtr SendAddress = new IntPtr(0x69A0D0);
-        private static IntPtr LoopAddress = LocalHook.GetProcAddress("MSVBVM60.DLL", "rtcDoEvents");
+        private static readonly IntPtr HandleAddress = new IntPtr(0x64E050);
+        private static readonly IntPtr SendAddress = new IntPtr(0x69A0D0);
+        private static readonly IntPtr LoopAddress = LocalHook.GetProcAddress("MSVBVM60.DLL", "rtcDoEvents");
 
         #endregion
 
         #region -- Function Pointers --
         [UnmanagedFunctionPointer(CallingConvention.StdCall, SetLastError = true)]
-        public unsafe delegate void THandleData([MarshalAs(UnmanagedType.BStr)] string data);
+        public unsafe delegate void HandleData([MarshalAs(UnmanagedType.BStr)] string data);
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall, SetLastError = true)]
-        public unsafe delegate void TSendData([MarshalAs(UnmanagedType.BStr)] ref string data);
+        public unsafe delegate void SendData([MarshalAs(UnmanagedType.BStr)] ref string data);
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall, SetLastError = true)]
-        public unsafe delegate void TLoop();
+        public unsafe delegate void Loop();
 
-        public static readonly THandleData PHandleData = (THandleData)Marshal.GetDelegateForFunctionPointer(HandleAddress, typeof(THandleData));
-        public static readonly TSendData PSendData = (TSendData)Marshal.GetDelegateForFunctionPointer(SendAddress, typeof(TSendData));
-        public static readonly TLoop PLoop = (TLoop)Marshal.GetDelegateForFunctionPointer(LoopAddress, typeof(TLoop));
+        public static readonly HandleData PHandleData = (HandleData)Marshal.GetDelegateForFunctionPointer(HandleAddress, typeof(HandleData));
+        public static readonly SendData PSendData = (SendData)Marshal.GetDelegateForFunctionPointer(SendAddress, typeof(SendData));
+        public static readonly Loop PLoop = (Loop)Marshal.GetDelegateForFunctionPointer(LoopAddress, typeof(Loop));
 
         #endregion
 
-
-        public Main(RemoteHooking.IContext inContext, String inChannelName)
-        {
-            try
-            {
-                Interface = RemoteHooking.IpcConnectClient<MainModel>(inChannelName);
-                ChannelName = inChannelName;
-                //RemoteHooking.GetCurrentProcessId()
-                //Interface.IsInstalled(true);
-                Interface.Status = true;
-            }
-            catch (Exception ex)
-            {
-                //Interface.ErrorHandler(ex);
-                Interface.Error = ex.ToString();
-            }
-        }
-
-        public unsafe void Run(RemoteHooking.IContext inContext, String inChannelName)
-        {
-            try
-            {
-                HandleHook = LocalHook.Create(HandleAddress, new THandleData(HKHandleData), this);
-                HandleHook.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
-                SendHook = LocalHook.Create(SendAddress, new TSendData(HKSendData), this);
-                SendHook.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
-                LoopHook = LocalHook.Create(LoopAddress, new TLoop(HKLoop), this);
-                LoopHook.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
-            }
-            catch (Exception ex)
-            {
-                //Interface.ErrorHandler(ex);
-                Interface.Error = ex.ToString();
-            }
-        }
+        #region -- Hooks --
 
         private static unsafe void HKHandleData([MarshalAs(UnmanagedType.BStr)] string data)
         {
@@ -94,7 +60,7 @@ namespace AORNet
             }
             catch (Exception ex)
             {
-                ((Main)HookRuntimeInfo.Callback).Interface.Error = ex.ToString();
+                ((Main)HookRuntimeInfo.Callback).Interface.ErrorHandler(ex);
             }
             finally
             {
@@ -107,11 +73,11 @@ namespace AORNet
             try
             {
                 //((Main)HookRuntimeInfo.Callback).Interface.Receive("Send=" + data );
-                
+
             }
             catch (Exception ex)
             {
-                ((Main)HookRuntimeInfo.Callback).Interface.Error = ex.ToString();
+                ((Main)HookRuntimeInfo.Callback).Interface.ErrorHandler(ex);
             }
             finally
             {
@@ -127,13 +93,49 @@ namespace AORNet
             }
             catch (Exception ex)
             {
-                ((Main)HookRuntimeInfo.Callback).Interface.Error = ex.ToString();
+                ((Main)HookRuntimeInfo.Callback).Interface.ErrorHandler(ex);
             }
             finally
             {
                 PLoop();
             }
         }
+
+        #endregion 
+
+
+        public Main(RemoteHooking.IContext inContext, String inChannelName)
+        {
+            try
+            {
+                Interface = RemoteHooking.IpcConnectClient<RemoteService>(inChannelName);
+                ChannelName = inChannelName;
+                Interface.IsInstalled(true);
+            }
+            catch (Exception ex)
+            {
+                Interface.ErrorHandler(ex);
+            }
+        }
+
+        public unsafe void Run(RemoteHooking.IContext inContext, String inChannelName)
+        {
+            try
+            {
+                HandleHook = LocalHook.Create(HandleAddress, new HandleData(HKHandleData), this);
+                HandleHook.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
+                SendHook = LocalHook.Create(SendAddress, new SendData(HKSendData), this);
+                SendHook.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
+                LoopHook = LocalHook.Create(LoopAddress, new Loop(HKLoop), this);
+                LoopHook.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
+            }
+            catch (Exception ex)
+            {
+                Interface.ErrorHandler(ex);
+            }
+        }
+
+
 
     }
 }
