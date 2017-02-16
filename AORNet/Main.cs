@@ -44,15 +44,15 @@ namespace AORNet
         [UnmanagedFunctionPointer(CallingConvention.StdCall, SetLastError = true)]
         public unsafe delegate void Loop();
 
-        public static readonly HandleData PHandleData = (HandleData)Marshal.GetDelegateForFunctionPointer(HandleAddress, typeof(HandleData));
-        public static readonly SendData PSendData = (SendData)Marshal.GetDelegateForFunctionPointer(SendAddress, typeof(SendData));
-        public static readonly Loop PLoop = (Loop)Marshal.GetDelegateForFunctionPointer(LoopAddress, typeof(Loop));
+        public static readonly HandleData SendToClient = (HandleData)Marshal.GetDelegateForFunctionPointer(HandleAddress, typeof(HandleData));
+        public static readonly SendData SendToServer = (SendData)Marshal.GetDelegateForFunctionPointer(SendAddress, typeof(SendData));
+        public static readonly Loop SendToLoop = (Loop)Marshal.GetDelegateForFunctionPointer(LoopAddress, typeof(Loop));
 
         #endregion
 
         #region -- Hooks --
 
-        private static unsafe void HKHandleData([MarshalAs(UnmanagedType.BStr)] string data)
+        private static unsafe void HookedHandleData([MarshalAs(UnmanagedType.BStr)] string data)
         {
             try
             {
@@ -64,11 +64,11 @@ namespace AORNet
             }
             finally
             {
-                PHandleData(data);
+                SendToClient(data);
             }
         }
 
-        private static unsafe void HKSendData([MarshalAs(UnmanagedType.BStr)] ref string data)
+        private static unsafe void HookedSendData([MarshalAs(UnmanagedType.BStr)] ref string data)
         {
             try
             {
@@ -81,11 +81,11 @@ namespace AORNet
             }
             finally
             {
-                PSendData(ref data);
+                SendToServer(ref data);
             }
         }
 
-        private static unsafe void HKLoop()
+        private static unsafe void HookedLoop()
         {
             try
             {
@@ -97,13 +97,13 @@ namespace AORNet
             }
             finally
             {
-                PLoop();
+                SendToLoop();
             }
         }
 
-        #endregion 
+        #endregion
 
-
+        #region -- DLL Methods --
         public Main(RemoteHooking.IContext inContext, String inChannelName)
         {
             try
@@ -122,11 +122,11 @@ namespace AORNet
         {
             try
             {
-                HandleHook = LocalHook.Create(HandleAddress, new HandleData(HKHandleData), this);
+                HandleHook = LocalHook.Create(HandleAddress, new HandleData(HookedHandleData), this);
                 HandleHook.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
-                SendHook = LocalHook.Create(SendAddress, new SendData(HKSendData), this);
+                SendHook = LocalHook.Create(SendAddress, new SendData(HookedSendData), this);
                 SendHook.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
-                LoopHook = LocalHook.Create(LoopAddress, new Loop(HKLoop), this);
+                LoopHook = LocalHook.Create(LoopAddress, new Loop(HookedLoop), this);
                 LoopHook.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
             }
             catch (Exception ex)
@@ -134,6 +134,7 @@ namespace AORNet
                 Interface.ErrorHandler(ex);
             }
         }
+        #endregion
 
 
 
