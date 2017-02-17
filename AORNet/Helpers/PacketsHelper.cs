@@ -22,7 +22,7 @@ namespace AORNet.Helpers
 
                 if (itemId.Contains(GamePackets.INVENTORY_ITEM_TREASURE_ID))
                 {
-                    //DataManagment.ConsoleInterface("Cofre encontrado en x:" + split[1] + " y: " + split[2]);
+                    CheatingHelper.SendConsoleMessage("Cofre encontrado en x:" + split[1] + " y: " + split[2]);
                 }
             }
 
@@ -37,23 +37,23 @@ namespace AORNet.Helpers
                 spellPosition = spellPosition.Substring(3);
                 if (spellName.Contains("Apocalipsis"))
                 {
-                    Player.Configuration.ApocaPosition = "LH" + spellPosition;
+                    Cheater.Configuration.ApocaPosition = spellPosition;
                 }
                 if (spellName.Contains("Inmovilizar"))
                 {
-                    Player.Configuration.InmoPosition = "LH" + spellPosition;
+                    Cheater.Configuration.InmoPosition = spellPosition;
                 }
                 if (spellName.Contains("Remover paralisis"))
                 {
-                    Player.Configuration.RemoPosition = "LH" + spellPosition;
+                    Cheater.Configuration.RemoPosition = spellPosition;
                 }
                 if (spellName.Contains("Descarga"))
                 {
-                    Player.Configuration.DescargaPosition = "LH" + spellPosition;
+                    Cheater.Configuration.DescargaPosition = spellPosition;
                 }
                 if (spellName.Contains("Tormenta"))
                 {
-                    Player.Configuration.TormentaPosition = "LH" + spellPosition;
+                    Cheater.Configuration.TormentaPosition = spellPosition;
                 }
             }
 
@@ -62,7 +62,7 @@ namespace AORNet.Helpers
             //
             if (packet.StartsWith(GamePackets.CHEATER_PARALIZED))
             {
-                Player.IsParalized = true;
+                Cheater.Instance.IsParalized = true;
             }
 
             //
@@ -70,7 +70,7 @@ namespace AORNet.Helpers
             //
             if (packet.StartsWith(GamePackets.CHEATER_REMOVED))
             {
-                Player.IsParalized = false;
+                Cheater.Instance.IsParalized = false;
             }
 
             //
@@ -78,17 +78,17 @@ namespace AORNet.Helpers
             //
             if (packet.StartsWith(GamePackets.PLAYER_PARALIZED))
             {
-                if (Player.IsParalized)
+                if (Cheater.Instance.IsParalized)
                 {
                     string[] split = packet.Split(new Char[] { ',' });
                     int posX = int.Parse(split[0].Substring(2));
                     int posY = int.Parse(split[1]);
-                    Player.PosX = int.Parse(split[0].Substring(2));
-                    Player.PosY = int.Parse(split[1]);
+                    Cheater.Instance.PosX = int.Parse(split[0].Substring(2));
+                    Cheater.Instance.PosY = int.Parse(split[1]);
 
-                    //CastRemo(posX, posY);
+                    CheatingHelper.CastSpell(Cheater.Configuration.RemoPosition,posX, posY);
 
-                    Player.IsParalized = false;
+                    Cheater.Instance.IsParalized = false;
                 }
             }
 

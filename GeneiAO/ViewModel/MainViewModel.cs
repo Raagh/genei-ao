@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
@@ -10,6 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using EasyHook;
 using GalaSoft.MvvmLight.CommandWpf;
 using GeneiAO.Model;
@@ -45,6 +47,7 @@ namespace GeneiAO.ViewModel
         #region -- Private Properties --
         private bool _status;
         private string _error;
+        private List<Player> _players;
         #endregion
 
         #region -- Public Properties --
@@ -64,6 +67,15 @@ namespace GeneiAO.ViewModel
             set
             {
                 _error = value;
+                OnPropertyChanged();
+            }
+        }
+        public List<Player> Players
+        {
+            get { return _players; }
+            set
+            {
+                _players = value;
                 OnPropertyChanged();
             }
         }

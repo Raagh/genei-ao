@@ -47,11 +47,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\CheatingHelper.cs" />
+    <Compile Include="Helpers\MemoryHelper.cs" />
     <Compile Include="Helpers\PacketsHelper.cs" />
+    <Compile Include="Model\Cheater.cs" />
     <Compile Include="Model\GamePackets.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="Configurations\LibraryConfiguration.cs" />
     <Compile Include="Model\Player.cs" />
-    <Compile Include="Model\PlayerConfiguration.cs" />
+    <Compile Include="Configurations\CheaterConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

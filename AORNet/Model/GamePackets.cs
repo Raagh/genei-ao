@@ -27,6 +27,12 @@ namespace AORNet.Model
         public const string GM_READ_PROCESS = "PRC";
         public const string GM_READ_PROCESS_DEFINITION = "PRR";
         public const string CLEAN_CARTEL = ";1  ";
+        public const string INVENTORY_USE_1SLOT = "USEct@A";
+        public const string INVENTORY_USE_2SLOT = "USEe{@C";
+        public const string INVENTORY_USA_1SLOT = "USA>O=:";
+        public const string INVENTORY_USA_2SLOT = "USAf|A:";
+
+
 
     }
 }

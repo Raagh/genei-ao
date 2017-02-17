@@ -14,5 +14,12 @@
         <Label x:Name="ErrorLabel" Content="{Binding Error}" HorizontalAlignment="Center"  VerticalAlignment="Center" RenderTransformOrigin="-2.94,-1.197" Height="99" Width="497" Margin="10,41,10,179" />
         <Label x:Name="StatusLabel" Content="{Binding Status}" RenderTransformOrigin="-2.94,-1.197" Height="33" Width="75" Margin="218,223,224,63" HorizontalContentAlignment="Center"/>
         <Button x:Name="StartButton" Content="Start" Margin="218,280,0,0" Width="75" Command="{Binding HookCommand}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <ListView x:Name="PlayersListView" HorizontalAlignment="Left" Height="144" Margin="27,156,0,0" VerticalAlignment="Top" Width="153" ItemsSource="{Binding Players}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Players" />
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </Window>
