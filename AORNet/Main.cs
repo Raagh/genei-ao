@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using AORNet.Helpers;
 using GeneiAO.Model;
 
 
@@ -15,7 +16,7 @@ namespace AORNet
 {
     public class Main : IEntryPoint
     {
-        #region -- Instance Properties --
+        #region -- Local Properties --
 
         private LocalHook HandleHook;
         private LocalHook SendHook;
@@ -44,19 +45,22 @@ namespace AORNet
         [UnmanagedFunctionPointer(CallingConvention.StdCall, SetLastError = true)]
         public unsafe delegate void Loop();
 
-        public static readonly HandleData SendToClient = (HandleData)Marshal.GetDelegateForFunctionPointer(HandleAddress, typeof(HandleData));
-        public static readonly SendData SendToServer = (SendData)Marshal.GetDelegateForFunctionPointer(SendAddress, typeof(SendData));
-        public static readonly Loop SendToLoop = (Loop)Marshal.GetDelegateForFunctionPointer(LoopAddress, typeof(Loop));
+        public static readonly HandleData PHandleData = (HandleData)Marshal.GetDelegateForFunctionPointer(HandleAddress, typeof(HandleData));
+        public static readonly SendData PSendData = (SendData)Marshal.GetDelegateForFunctionPointer(SendAddress, typeof(SendData));
+        public static readonly Loop PLoop = (Loop)Marshal.GetDelegateForFunctionPointer(LoopAddress, typeof(Loop));
 
         #endregion
 
         #region -- Hooks --
 
-        private static unsafe void HookedHandleData([MarshalAs(UnmanagedType.BStr)] string data)
+        private static unsafe void HookedHandleData([MarshalAs(UnmanagedType.BStr)] string packet)
         {
             try
             {
-                //(Main)HookRuntimeInfo.Callback).Interface.Receive("Handle= " + data );               
+                //(Main)HookRuntimeInfo.Callback).Interface.Receive("Handle= " + packet );  
+
+                packet = PacketsHelper.AnalyzeHandlePackets(packet);
+
             }
             catch (Exception ex)
             {
@@ -64,15 +68,17 @@ namespace AORNet
             }
             finally
             {
-                SendToClient(data);
+                SendToClient(packet);
             }
         }
 
-        private static unsafe void HookedSendData([MarshalAs(UnmanagedType.BStr)] ref string data)
+        private static unsafe void HookedSendData([MarshalAs(UnmanagedType.BStr)] ref string packet)
         {
             try
             {
-                //((Main)HookRuntimeInfo.Callback).Interface.Receive("Send=" + data );
+                //((Main)HookRuntimeInfo.Callback).Interface.Receive("Send=" + packet );
+
+                packet = PacketsHelper.AnalyzeSendPackets(packet);
 
             }
             catch (Exception ex)
@@ -81,7 +87,7 @@ namespace AORNet
             }
             finally
             {
-                SendToServer(ref data);
+                SendToServer(packet);
             }
         }
 
@@ -97,7 +103,7 @@ namespace AORNet
             }
             finally
             {
-                SendToLoop();
+                PLoop();
             }
         }
 
@@ -136,7 +142,19 @@ namespace AORNet
         }
         #endregion
 
+        #region -- Static Methods --
 
+        public static void SendToClient(string packet)
+        {
+            PHandleData(packet);
+        }
+
+        public static void SendToServer(string packet)
+        {
+            PSendData(ref packet);
+        }
+
+        #endregion
 
     }
 }

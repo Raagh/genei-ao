@@ -46,8 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GamePackets.cs" />
+    <Compile Include="Helpers\CheatingHelper.cs" />
+    <Compile Include="Helpers\PacketsHelper.cs" />
+    <Compile Include="Model\GamePackets.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="Model\Player.cs" />
+    <Compile Include="Model\PlayerConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -67,6 +71,7 @@
       <Name>GeneiAO</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y /d  "$(ProjectDir)Libraries\*.*" "$(ProjectDir)$(OutDir)"</PostBuildEvent>
