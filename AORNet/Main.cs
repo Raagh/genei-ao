@@ -57,9 +57,9 @@ namespace AORNet
         {
             try
             {
-                //(Main)HookRuntimeInfo.Callback).Interface.Receive("Handle= " + packet );  
+                ((Main)HookRuntimeInfo.Callback).Interface.Receive("Recv= " + packet );  
 
-                packet = PacketsHelper.AnalyzeHandlePackets(packet);
+                //packet = PacketsHelper.AnalyzeHandlePackets(packet);
 
             }
             catch (Exception ex)
@@ -76,9 +76,9 @@ namespace AORNet
         {
             try
             {
-                //((Main)HookRuntimeInfo.Callback).Interface.Receive("Send=" + packet );
+                ((Main)HookRuntimeInfo.Callback).Interface.Receive("Send=" + packet );
 
-                packet = PacketsHelper.AnalyzeSendPackets(packet);
+                //packet = PacketsHelper.AnalyzeSendPackets(packet);
 
             }
             catch (Exception ex)
