@@ -69,6 +69,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ConsoleTest\ConsoleTest.csproj">
+      <Project>{21a15d00-33f1-4ba2-b96a-6da03f69ed1e}</Project>
+      <Name>ConsoleTest</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GeneiAO\GeneiAO.csproj">
       <Project>{aab4c83a-d6f1-4f0b-825e-f6e3b7ac0c02}</Project>
       <Name>GeneiAO</Name>
