@@ -32,7 +32,5 @@ namespace AORNet.Model
         public const string InventoryUsa1Slot = "USA>O=:";
         public const string InventoryUsa2Slot = "USAf|A:";
 
-
-
     }
 }

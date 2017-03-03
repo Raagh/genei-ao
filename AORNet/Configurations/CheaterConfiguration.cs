@@ -8,13 +8,13 @@ namespace AORNet.Configurations
 {
     public class CheaterConfiguration
     {
-        public string InmoPosition = string.Empty;
-        public string ApocaPosition = string.Empty;
-        public string DescargaPosition = string.Empty;
-        public string RemoPosition = string.Empty;
-        public string TormentaPosition = string.Empty;
-        public string RedPotionPosition = string.Empty;
-        public string BluePotionPosition = string.Empty;
-        public string YellowPotionPosition = string.Empty;
+        public string InmoPosition { get; set; } = string.Empty;
+        public string ApocaPosition { get; set; } = string.Empty;
+        public string DescargaPosition { get; set; } = string.Empty;
+        public string RemoPosition { get; set; } = string.Empty;
+        public string TormentaPosition { get; set; } = string.Empty;
+        public string RedPotionPosition { get; set; } = string.Empty;
+        public string BluePotionPosition { get; set; } = string.Empty;
+        public string YellowPotionPosition { get; set; } = string.Empty;
     }
 }
