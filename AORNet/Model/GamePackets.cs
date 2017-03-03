@@ -8,29 +8,29 @@ namespace AORNet.Model
 {
     public static class GamePackets
     {
-        public const string CAST_SPELL = "LH";
-        public const string INTERMEDIATE_CAST_SPELL = "UK1";
-        public const string THROW_SPELL = "WLC";
-        public const string MOVE_PLAYER = "MP";
-        public const string PLAYER_ENTER_MAP = "RM";
-        public const string PLAYER_EXIT_MAP = "QDL";
-        public const string PLAYER_PARALIZED = "PU";
-        public const string PLAYER_INVISIBILITY = "V3";
-        public const string CHEATER_PARALIZED = "P9";
-        public const string CHEATER_REMOVED = "P8";
-        public const string CHEATER_EXIT_MAP = "CM";
-        public const string INVENTORY_SPELL = "SHS";
-        public const string INVENTORY_ITEM = "CSI";
-        public const string INVENTORY_ITEM_TREASURE_ID = "24078";
-        public const string MAP_ITEM = "HO";
-        public const string GM_TAKING_PICTURE = "PAIN";
-        public const string GM_READ_PROCESS = "PRC";
-        public const string GM_READ_PROCESS_DEFINITION = "PRR";
-        public const string CLEAN_CARTEL = ";1  ";
-        public const string INVENTORY_USE_1SLOT = "USEct@A";
-        public const string INVENTORY_USE_2SLOT = "USEe{@C";
-        public const string INVENTORY_USA_1SLOT = "USA>O=:";
-        public const string INVENTORY_USA_2SLOT = "USAf|A:";
+        public const string CastSpell = "LH";
+        public const string IntermediateCastSpell = "UK1";
+        public const string ThrowSpell = "WLC";
+        public const string MovePlayer = "MP";
+        public const string PlayerEnterMap = "RM";
+        public const string PlayerExitMap = "QDL";
+        public const string PlayerParalized = "PU";
+        public const string PlayerInvisibility = "V3";
+        public const string CheaterParalized = "P9";
+        public const string CheaterRemoved = "P8";
+        public const string CheaterExitMap = "CM";
+        public const string InventorySpell = "SHS";
+        public const string InventoryItem = "CSI";
+        public const string InventoryItemTreasureId = "24078";
+        public const string MapItem = "HO";
+        public const string GmTakingPicture = "PAIN";
+        public const string GmReadProcess = "PRC";
+        public const string GmReadProcessDefinition = "PRR";
+        public const string CleanCartel = ";1  ";
+        public const string InventoryUse1Slot = "USEct@A";
+        public const string InventoryUse2Slot = "USEe{@C";
+        public const string InventoryUsa1Slot = "USA>O=:";
+        public const string InventoryUsa2Slot = "USAf|A:";
 
 
 

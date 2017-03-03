@@ -12,6 +12,7 @@ namespace AORNet.Model
         public string Faction = string.Empty;
         public string Class = string.Empty;
         public bool IsParalized = false;
+        public bool IsInvisible = false;
         public int PosX = 0;
         public int PosY = 0;
     }

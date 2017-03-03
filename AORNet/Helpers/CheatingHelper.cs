@@ -13,10 +13,10 @@ namespace AORNet.Helpers
     {
         public static void CastSpell(string spellPosition,int posX,int posY) 
         {
-            Main.SendToServer(GamePackets.CAST_SPELL + spellPosition);
-            Main.SendToServer(GamePackets.INTERMEDIATE_CAST_SPELL);
-            Main.SendToServer(GamePackets.THROW_SPELL + "," + posX + "," + (posY -1) + "," + 1);
-            Main.SendToServer(GamePackets.CLEAN_CARTEL);
+            Main.SendToServer(GamePackets.CastSpell + spellPosition);
+            Main.SendToServer(GamePackets.IntermediateCastSpell);
+            Main.SendToServer(GamePackets.ThrowSpell + "," + posX + "," + (posY -1) + "," + 1);
+            Main.SendToServer(GamePackets.CleanCartel);
         }
 
         public static void SendConsoleMessage(string message)
@@ -41,13 +41,13 @@ namespace AORNet.Helpers
                 {
                     if (actualLife != maxLife)
                     {
-                        Main.SendToServer(GamePackets.INVENTORY_USA_1SLOT);
-                        Main.SendToServer(GamePackets.INVENTORY_USE_1SLOT);
+                        Main.SendToServer(GamePackets.InventoryUsa1Slot);
+                        Main.SendToServer(GamePackets.InventoryUse1Slot);
                     }
                     else if (actualMana != maxMana)
                     {
-                        Main.SendToServer(GamePackets.INVENTORY_USA_2SLOT);
-                        Main.SendToServer(GamePackets.INVENTORY_USE_2SLOT);
+                        Main.SendToServer(GamePackets.InventoryUsa2Slot);
+                        Main.SendToServer(GamePackets.InventoryUse2Slot);
                     }
                 }
             }

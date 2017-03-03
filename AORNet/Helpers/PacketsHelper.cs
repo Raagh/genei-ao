@@ -14,13 +14,13 @@ namespace AORNet.Helpers
             //
             ////Checks if there is any Chest in the map
             //
-            if (packet.StartsWith(GamePackets.MAP_ITEM))
+            if (packet.StartsWith(GamePackets.MapItem))
             {
                 string[] split = packet.Split(new Char[] { ',' });
                 string itemId = split[0];
                 itemId = itemId.Substring(2);
 
-                if (itemId.Contains(GamePackets.INVENTORY_ITEM_TREASURE_ID))
+                if (itemId.Contains(GamePackets.InventoryItemTreasureId))
                 {
                     CheatingHelper.SendConsoleMessage("Cofre encontrado en x:" + split[1] + " y: " + split[2]);
                 }
@@ -29,7 +29,7 @@ namespace AORNet.Helpers
             //
             ////Gets the spells positions
             //
-            if (packet.StartsWith(GamePackets.INVENTORY_SPELL))
+            if (packet.StartsWith(GamePackets.InventorySpell))
             {
                 string[] split = packet.Split(new Char[] { ',' });
                 string spellPosition = split[0];
@@ -60,7 +60,7 @@ namespace AORNet.Helpers
             //
             ////If you Get Inmovilizado
             //
-            if (packet.StartsWith(GamePackets.CHEATER_PARALIZED))
+            if (packet.StartsWith(GamePackets.CheaterParalized))
             {
                 Cheater.Instance.IsParalized = true;
             }
@@ -68,7 +68,7 @@ namespace AORNet.Helpers
             //
             ////If you Get Removed from inmo spell
             //
-            if (packet.StartsWith(GamePackets.CHEATER_REMOVED))
+            if (packet.StartsWith(GamePackets.CheaterRemoved))
             {
                 Cheater.Instance.IsParalized = false;
             }
@@ -76,7 +76,7 @@ namespace AORNet.Helpers
             //
             //// If the player Gets paralized, Cast Remover Paralisis
             //
-            if (packet.StartsWith(GamePackets.PLAYER_PARALIZED))
+            if (packet.StartsWith(GamePackets.PlayerParalized))
             {
                 if (Cheater.Instance.IsParalized)
                 {
@@ -95,7 +95,7 @@ namespace AORNet.Helpers
             //
             ////Players exits the map
             //
-            if (packet.StartsWith(GamePackets.PLAYER_EXIT_MAP)) 
+            if (packet.StartsWith(GamePackets.PlayerExitMap)) 
             {
                 string[] split = packet.Split(new Char[] { 'L' });
                 if (split[0] == "QD")
@@ -112,7 +112,7 @@ namespace AORNet.Helpers
             //
             ////Cheater exits the map
             //
-            if (packet.StartsWith(GamePackets.CHEATER_EXIT_MAP)) 
+            if (packet.StartsWith(GamePackets.CheaterExitMap)) 
             {
                 //charactersListInAutoAim.Clear();
                 //charactersListInMap.Clear();
@@ -126,13 +126,13 @@ namespace AORNet.Helpers
 
         public static string AnalyzeSendPackets(string packet)
         {
-            if (packet.StartsWith(GamePackets.GM_READ_PROCESS))
+            if (packet.StartsWith(GamePackets.GmReadProcess))
             {
                 packet = string.Empty;
                 packet = "PRC @ Inicio:65672 @ Furius AO V 5.5.:1704776 @ FúriusAO:2032840 @ Skype™ - amolinari:1573518 @ Games:591016 @ Program Manager:131206";
             }
 
-            if (packet.Contains(GamePackets.GM_READ_PROCESS_DEFINITION))
+            if (packet.Contains(GamePackets.GmReadProcessDefinition))
             {
                 packet = string.Empty;
                 packet = @"PRRC:\\FuriusAO\\FuriusAO.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Skype\\Phone\\Skype.exe%C:\\Program Files(x86)\\Skype\\Phone\\Skype.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Prog찀ᣉ   es(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Common Files\\Java\\Java Update\\jusched.exe%C:\\Program Files(x86)\\Common Files\\Java\\Java Update\\jusched.exe%C:\\Program Files(x86)\\Common Files\\Java\\Java Update\\jusched.exe%C:\\Program Files(x86)\\360\\Total Security\\safemon\\QHSafeTray.exe%C:\\Program Files(x86)\\AVG Web TuneUp\\vprot.exe%C:\\Program Files(x86)\\Intel\\Intel(R) USB 3.0 eXtensible Host Controller Driver\\Application\\iusb3mon.exe%C:\\Program Files(x86)\\Hotkey\\HkeyTray.exe%C:\\Program Files(x86)\\Hotkey\\HkeyTray.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Users\\Pferraggi\\AppData\\Local\\Microsoft\\BingSvc\\BingSvc.exe%C:\\Program Files(x86)\\ChiconyCam\\CECAPLF.exe%";
