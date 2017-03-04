@@ -11,5 +11,6 @@ namespace AORNet.Configurations
         public const string ServerName = "FuriusAO";
         public const int StructAddress = 0x007C04C4;
         public const int OpenForReading = 0x001F0FFF;
+        public static bool IsProcessOpen = false;
     }
 }

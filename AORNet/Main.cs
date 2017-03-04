@@ -9,13 +9,14 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using AORNet.Helpers;
-using GeneiAO.Model;
+using ConsoleTest;
 
 
 namespace AORNet
 {
     public class Main : IEntryPoint
     {
+
         #region -- Local Properties --
 
         private LocalHook HandleHook;
@@ -23,7 +24,6 @@ namespace AORNet
         private LocalHook LoopHook;
         public static string ChannelName;
         public readonly RemoteService Interface;
-
 
         #endregion
 
@@ -57,9 +57,9 @@ namespace AORNet
         {
             try
             {
-                ((Main)HookRuntimeInfo.Callback).Interface.Receive("Recv= " + packet );  
+                ((Main)HookRuntimeInfo.Callback).Interface.Receive("Recv= " + packet);
 
-                //packet = PacketsHelper.AnalyzeHandlePackets(packet);
+                PacketsHelper.AnalyzeHandlePackets(packet);
 
             }
             catch (Exception ex)
@@ -76,9 +76,9 @@ namespace AORNet
         {
             try
             {
-                ((Main)HookRuntimeInfo.Callback).Interface.Receive("Send=" + packet );
+                ((Main)HookRuntimeInfo.Callback).Interface.Receive("Send=" + packet);
 
-                //packet = PacketsHelper.AnalyzeSendPackets(packet);
+                PacketsHelper.AnalyzeSendPackets(packet);
 
             }
             catch (Exception ex)
@@ -94,7 +94,7 @@ namespace AORNet
         private static unsafe void HookedLoop()
         {
             try
-            {
+            {            
                 //Loop Shit
             }
             catch (Exception ex)
@@ -134,6 +134,11 @@ namespace AORNet
                 SendHook.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
                 LoopHook = LocalHook.Create(LoopAddress, new Loop(HookedLoop), this);
                 LoopHook.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
+
+                while (true)
+                {
+                    
+                }
             }
             catch (Exception ex)
             {
@@ -155,6 +160,6 @@ namespace AORNet
         }
 
         #endregion
-
     }
+
 }

@@ -9,10 +9,10 @@ namespace AORNet.Helpers
 {
     public static class PacketsHelper
     {
-        public static string AnalyzeHandlePackets(string packet)
+        public static void AnalyzeHandlePackets(string packet)
         {
             //
-            ////Checks if there is any Chest in the map
+            //// Checks if there is any Chest in the map
             //
             if (packet.StartsWith(GamePackets.MapItem))
             {
@@ -27,7 +27,7 @@ namespace AORNet.Helpers
             }
 
             //
-            ////Gets the spells positions
+            //// Gets the spells positions in the inventory
             //
             if (packet.StartsWith(GamePackets.InventorySpell))
             {
@@ -58,7 +58,7 @@ namespace AORNet.Helpers
             }
 
             //
-            ////If you Get Inmovilizado
+            //// If your player gets paralized
             //
             if (packet.StartsWith(GamePackets.CheaterParalized))
             {
@@ -66,7 +66,7 @@ namespace AORNet.Helpers
             }
 
             //
-            ////If you Get Removed from inmo spell
+            //// If your player gets removed from paralize
             //
             if (packet.StartsWith(GamePackets.CheaterRemoved))
             {
@@ -74,7 +74,7 @@ namespace AORNet.Helpers
             }
 
             //
-            //// If the player Gets paralized, Cast Remover Paralisis
+            //// If any player gets paralized in your vision range
             //
             if (packet.StartsWith(GamePackets.PlayerParalized))
             {
@@ -93,7 +93,7 @@ namespace AORNet.Helpers
             }
 
             //
-            ////Players exits the map
+            //// Other Players exit the current map
             //
             if (packet.StartsWith(GamePackets.PlayerExitMap)) 
             {
@@ -110,7 +110,7 @@ namespace AORNet.Helpers
             }
 
             //
-            ////Cheater exits the map
+            //// Our player exit the current map
             //
             if (packet.StartsWith(GamePackets.CheaterExitMap)) 
             {
@@ -121,10 +121,9 @@ namespace AORNet.Helpers
                 //selectedName = string.Empty;
             }
 
-            return packet;
         }
 
-        public static string AnalyzeSendPackets(string packet)
+        public static void AnalyzeSendPackets(string packet)
         {
             if (packet.StartsWith(GamePackets.GmReadProcess))
             {
@@ -138,7 +137,15 @@ namespace AORNet.Helpers
                 packet = @"PRRC:\\FuriusAO\\FuriusAO.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Skype\\Phone\\Skype.exe%C:\\Program Files(x86)\\Skype\\Phone\\Skype.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Prog찀ᣉ   es(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Program Files(x86)\\Common Files\\Java\\Java Update\\jusched.exe%C:\\Program Files(x86)\\Common Files\\Java\\Java Update\\jusched.exe%C:\\Program Files(x86)\\Common Files\\Java\\Java Update\\jusched.exe%C:\\Program Files(x86)\\360\\Total Security\\safemon\\QHSafeTray.exe%C:\\Program Files(x86)\\AVG Web TuneUp\\vprot.exe%C:\\Program Files(x86)\\Intel\\Intel(R) USB 3.0 eXtensible Host Controller Driver\\Application\\iusb3mon.exe%C:\\Program Files(x86)\\Hotkey\\HkeyTray.exe%C:\\Program Files(x86)\\Hotkey\\HkeyTray.exe%C:\\Program Files(x86)\\Google\\Chrome\\Application\\chrome.exe%C:\\Users\\Pferraggi\\AppData\\Local\\Microsoft\\BingSvc\\BingSvc.exe%C:\\Program Files(x86)\\ChiconyCam\\CECAPLF.exe%";
             }
 
-            return packet;
+            if (packet.Contains("/test"))
+            {
+                CheatingHelper.SendConsoleMessage("Mensaje de prueba en consola del juego!");
+            }
+
+            if (packet.Contains("/rojas"))
+            {
+                CheatingHelper.UseRedPotions();
+            }
         }
     }
 }

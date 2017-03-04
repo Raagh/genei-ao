@@ -21,17 +21,15 @@ namespace AORNet.Helpers
 
         public static void SendConsoleMessage(string message)
         {
-            Main.SendToClient("|| GeneiAO >"+ message + "~10~236~18~0~0");
+            Main.SendToClient("||GeneiAO >"+ message + "~10~236~18~0~0");
         }
 
         public static void AutoPotas(string packet)
-        {
-            bool isProcessOpen = MemoryHelper.IsProcessOpen(LibraryConfiguration.ServerName);
-            if (isProcessOpen)
+        {          
+            if (LibraryConfiguration.IsProcessOpen)
             {
-                IntPtr processHandle = new IntPtr();
                 Process process = Process.GetProcessesByName(LibraryConfiguration.ServerName)[0];
-                processHandle = MemoryHelper.OpenProcess(LibraryConfiguration.OpenForReading, false, process.Id); 
+                IntPtr processHandle = MemoryHelper.OpenProcess(LibraryConfiguration.OpenForReading, false, process.Id); 
                 int maxLife = MemoryHelper.Read(processHandle, LibraryConfiguration.StructAddress);
                 int actualLife = MemoryHelper.Read(processHandle, LibraryConfiguration.StructAddress + 4);
                 int maxMana = MemoryHelper.Read(processHandle, LibraryConfiguration.StructAddress + 8);
@@ -51,12 +49,16 @@ namespace AORNet.Helpers
                     }
                 }
             }
+            else
+            {
+                LibraryConfiguration.IsProcessOpen = MemoryHelper.IsProcessOpen(LibraryConfiguration.ServerName);
+            }
         }
 
         public static void UseRedPotions()
         {
-            Main.SendToServer("USA>O=:");
-            Main.SendToServer("USAm~AA");
+            Main.SendToServer(GamePackets.InventoryUsa1Slot);
+            Main.SendToServer(GamePackets.InventoryUse1Slot);
         }
         
     }

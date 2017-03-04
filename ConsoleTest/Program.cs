@@ -35,6 +35,9 @@ namespace ConsoleTest
                 Console.WriteLine("There was an error while connecting to target:\r\n" + ExtInfo.ToString());
             }
 
+            Console.ReadKey();
+
         }
+
     }
 }
