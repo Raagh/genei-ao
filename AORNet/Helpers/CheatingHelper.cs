@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AORNet.Configurations;
 using AORNet.Model;
+using EasyHook;
 
 namespace AORNet.Helpers
 {
@@ -13,53 +14,54 @@ namespace AORNet.Helpers
     {
         public static void CastSpell(string spellPosition,int posX,int posY) 
         {
-            Main.SendToServer(GamePackets.CastSpell + spellPosition);
-            Main.SendToServer(GamePackets.IntermediateCastSpell);
-            Main.SendToServer(GamePackets.ThrowSpell + "," + posX + "," + (posY -1) + "," + 1);
-            Main.SendToServer(GamePackets.CleanCartel);
+            PacketsHelper.SendToServer(GamePackets.CastSpell + spellPosition);
+            PacketsHelper.SendToServer(GamePackets.IntermediateCastSpell);
+            PacketsHelper.SendToServer(GamePackets.ThrowSpell + "," + posX + "," + (posY -1) + "," + 1);
+            PacketsHelper.SendToServer(GamePackets.CleanCartel);
         }
 
         public static void SendConsoleMessage(string message)
         {
-            Main.SendToClient("||GeneiAO >"+ message + "~10~236~18~0~0");
+            PacketsHelper.SendToClient("||GeneiAO>"+ message + "~10~236~18~0~0");
         }
 
-        public static void AutoPotas(string packet)
+        public static void AutoPotas()
         {          
             if (LibraryConfiguration.IsProcessOpen)
             {
-                Process process = Process.GetProcessesByName(LibraryConfiguration.ServerName)[0];
-                IntPtr processHandle = MemoryHelper.OpenProcess(LibraryConfiguration.OpenForReading, false, process.Id); 
-                int maxLife = MemoryHelper.Read(processHandle, LibraryConfiguration.StructAddress);
-                int actualLife = MemoryHelper.Read(processHandle, LibraryConfiguration.StructAddress + 4);
-                int maxMana = MemoryHelper.Read(processHandle, LibraryConfiguration.StructAddress + 8);
-                int actualMana = MemoryHelper.Read(processHandle, LibraryConfiguration.StructAddress + 12);
+                int maxLife = MemoryHelper.Read(LibraryConfiguration.ProcessHandle, LibraryConfiguration.StructAddress);
+                int actualLife = MemoryHelper.Read(LibraryConfiguration.ProcessHandle, LibraryConfiguration.StructAddress + 4);
+                int maxMana = MemoryHelper.Read(LibraryConfiguration.ProcessHandle, LibraryConfiguration.StructAddress + 8);
+                int actualMana = MemoryHelper.Read(LibraryConfiguration.ProcessHandle, LibraryConfiguration.StructAddress + 12);
 
                 if (actualLife != 0)
                 {
                     if (actualLife != maxLife)
                     {
-                        Main.SendToServer(GamePackets.InventoryUsa1Slot);
-                        Main.SendToServer(GamePackets.InventoryUse1Slot);
+                        PacketsHelper.SendToServer(GamePackets.UseItemClick + PacketsHelper.Encrypt(Cheater.Configuration.RedPotionPosition));
+                        PacketsHelper.SendToServer(GamePackets.UseItemKey + PacketsHelper.Encrypt(Cheater.Configuration.RedPotionPosition));
                     }
                     else if (actualMana != maxMana)
                     {
-                        Main.SendToServer(GamePackets.InventoryUsa2Slot);
-                        Main.SendToServer(GamePackets.InventoryUse2Slot);
+                        PacketsHelper.SendToServer(GamePackets.UseItemClick + PacketsHelper.Encrypt(Cheater.Configuration.BluePotionPosition));
+                        PacketsHelper.SendToServer(GamePackets.UseItemKey + PacketsHelper.Encrypt(Cheater.Configuration.BluePotionPosition));
                     }
                 }
             }
             else
             {
                 LibraryConfiguration.IsProcessOpen = MemoryHelper.IsProcessOpen(LibraryConfiguration.ServerName);
+                LibraryConfiguration.AOProcess = Process.GetProcessesByName(LibraryConfiguration.ServerName)[0];
+                LibraryConfiguration.ProcessHandle = MemoryHelper.OpenProcess(LibraryConfiguration.OpenForReading, false, LibraryConfiguration.AOProcess.Id);
             }
         }
 
-        public static void UseRedPotions()
+        public static void AutoRemo()
         {
-            Main.SendToServer(GamePackets.InventoryUsa1Slot);
-            Main.SendToServer(GamePackets.InventoryUse1Slot);
-        }
-        
+            if (Cheater.Instance.IsParalized)
+            {
+                CastSpell(Cheater.Configuration.RemoPosition, Cheater.Instance.PosX, Cheater.Instance.PosY);
+            }
+        }       
     }
 }

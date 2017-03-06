@@ -21,16 +21,13 @@ namespace AORNet.Model
         public const string CheaterExitMap = "CM";
         public const string InventorySpell = "SHS";
         public const string InventoryItem = "CSI";
-        public const string InventoryItemTreasureId = "24078";
+        public const string MapItemTreasureId = "24078";
         public const string MapItem = "HO";
         public const string GmTakingPicture = "PAIN";
         public const string GmReadProcess = "PRC";
         public const string GmReadProcessDefinition = "PRR";
         public const string CleanCartel = ";1  ";
-        public const string InventoryUse1Slot = "USEct@A";
-        public const string InventoryUse2Slot = "USEe{@C";
-        public const string InventoryUsa1Slot = "USA>O=:";
-        public const string InventoryUsa2Slot = "USAf|A:";
-
+        public const string UseItemClick = "USE";
+        public const string UseItemKey = "USA";
     }
 }

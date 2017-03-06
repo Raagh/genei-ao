@@ -13,7 +13,7 @@ namespace ConsoleTest
     {
         static void Main(string[] args)
         {
-
+            var argentumProcess = Process.Start("D:\\FuriusAO\\FuriusAO.exe");
             try
             {
                 RemoteHooking.IpcCreateServer<RemoteService>(ref Defaults.CHANNEL_NAME, WellKnownObjectMode.Singleton);
@@ -28,15 +28,19 @@ namespace ConsoleTest
                     Console.WriteLine("No process exists with that name!");
                     return;
                 }
-                RemoteHooking.Inject(processID, InjectionOptions.DoNotRequireStrongName, Defaults.CURRENT_DIR + Defaults.DLL_NAME, Defaults.CURRENT_DIR + Defaults.DLL_NAME, new Object[] { Defaults.CHANNEL_NAME });
+                RemoteHooking.Inject(processID, InjectionOptions.DoNotRequireStrongName,
+                    Defaults.CURRENT_DIR + Defaults.DLL_NAME, Defaults.CURRENT_DIR + Defaults.DLL_NAME,
+                    new Object[] {Defaults.CHANNEL_NAME});
+                Console.ReadKey();
             }
             catch (Exception ExtInfo)
             {
                 Console.WriteLine("There was an error while connecting to target:\r\n" + ExtInfo.ToString());
             }
-
-            Console.ReadKey();
-
+            finally
+            {
+                argentumProcess.Close();
+            }          
         }
 
     }
