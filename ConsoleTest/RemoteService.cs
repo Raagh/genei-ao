@@ -15,10 +15,10 @@ namespace ConsoleTest
     {
         public void IsInstalled(bool isInstalled)
         {          
-            Console.WriteLine("Hooked installed succesfully.");
+            Console.WriteLine("Hooked installed successfully.");
         }
 
-        public void Receive(string message)
+        public void Message(string message)
         {
             Console.WriteLine(message);
         }

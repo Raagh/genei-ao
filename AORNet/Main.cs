@@ -65,7 +65,7 @@ namespace AORNet
         {
             try
             {
-                //((Main)HookRuntimeInfo.Callback).Interface.Receive("Recv= " + packet);
+                //((Main)HookRuntimeInfo.Callback).Interface.Message("Recv= " + packet);
 
                 PacketsHelper.AnalyzeHandlePackets(packet);
 
@@ -84,7 +84,7 @@ namespace AORNet
         {
             try
             {
-                //((Main)HookRuntimeInfo.Callback).Interface.Receive("Send=" + packet);
+                //((Main)HookRuntimeInfo.Callback).Interface.Message("Send=" + packet);
 
                 PacketsHelper.AnalyzeSendPackets(packet);
 
@@ -105,6 +105,8 @@ namespace AORNet
             {            
                 CheatingHelper.AutoPotas();
                 CheatingHelper.AutoRemo();
+                CheatingHelper.AutoAim();
+                //CheatingHelper.SpeedHack();
             }
             catch (Exception ex)
             {
@@ -121,7 +123,7 @@ namespace AORNet
         {
             try
             {
-                //((Main)HookRuntimeInfo.Callback).Interface.Receive("Encrypt= " + packet);
+                //((Main)HookRuntimeInfo.Callback).Interface.Message("Encrypt= " + packet);
             }
             catch (Exception ex)
             {

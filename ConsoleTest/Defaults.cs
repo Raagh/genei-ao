@@ -8,9 +8,9 @@ namespace ConsoleTest
 {
     public static class Defaults
     {
-        public static string CHANNEL_NAME = null;
-        public static string CURRENT_DIR = "D:\\Development\\GitHub\\genei-ao\\AORNet\\bin\\Debug" + "\\";
-        public static string PROCESS_NAME = "FuriusAO";
-        public static string DLL_NAME = "AORNet.dll";
+        public static string ChannelName = null;
+        public static string CurrentDir = "D:\\Development\\GitHub\\genei-ao\\AORNet\\bin\\Debug" + "\\";
+        public static string ProcessName = "FuriusAO";
+        public static string DllName = "AORNet.dll";
     }
 }

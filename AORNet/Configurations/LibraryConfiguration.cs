@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace AORNet.Configurations
 {
@@ -15,5 +16,11 @@ namespace AORNet.Configurations
         public static bool IsProcessOpen = false;
         public static Process AOProcess;
         public static IntPtr ProcessHandle;
+        public static Keys ApocaKey;
+        public static Keys DescargaKey;
+        public static Keys InmoKey;
+        public static Keys TormentaKey;
+        public static Keys RemoKey = Keys.Home;
+
     }
 }

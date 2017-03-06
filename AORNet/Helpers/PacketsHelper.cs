@@ -16,7 +16,7 @@ namespace AORNet.Helpers
             //
             if (packet.StartsWith(GamePackets.MapItem))
             {
-                string[] split = packet.Split(new Char[] { ',' });
+                string[] split = packet.Split(',');
                 string itemId = split[0];
                 itemId = itemId.Substring(2);
 
@@ -51,7 +51,7 @@ namespace AORNet.Helpers
             //
             else if (packet.StartsWith(GamePackets.InventorySpell))
             {
-                string[] split = packet.Split(new Char[] { ',' });
+                string[] split = packet.Split(',');
                 string spellPosition = split[0];
                 string spellName = split[2];
                 spellPosition = spellPosition.Substring(3);
@@ -97,7 +97,7 @@ namespace AORNet.Helpers
             {
                 if (Cheater.Instance.IsParalized)
                 {
-                    string[] split = packet.Split(new Char[] { ',' });
+                    string[] split = packet.Split(',');
                     Cheater.Instance.PosX = Int32.Parse(split[0].Substring(2));
                     Cheater.Instance.PosY = Int32.Parse(split[1]);                   
                 }
@@ -107,7 +107,7 @@ namespace AORNet.Helpers
             //
             else if (packet.StartsWith(GamePackets.PlayerExitMap)) 
             {
-                string[] split = packet.Split(new Char[] { 'L' });
+                string[] split = packet.Split('L');
                 if (split[0] == "QD")
                 {
                     //Character foundPlayerInAutoAim = charactersListInAutoAim.Find(x => x.id == int.Parse(split[1]));

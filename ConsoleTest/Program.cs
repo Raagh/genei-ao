@@ -16,9 +16,9 @@ namespace ConsoleTest
             var argentumProcess = Process.Start("D:\\FuriusAO\\FuriusAO.exe");
             try
             {
-                RemoteHooking.IpcCreateServer<RemoteService>(ref Defaults.CHANNEL_NAME, WellKnownObjectMode.Singleton);
+                RemoteHooking.IpcCreateServer<RemoteService>(ref Defaults.ChannelName, WellKnownObjectMode.Singleton);
                 int processID = -1;
-                foreach (Process p in Process.GetProcessesByName(Defaults.PROCESS_NAME))
+                foreach (Process p in Process.GetProcessesByName(Defaults.ProcessName))
                 {
                     processID = p.Id;
                     break;
@@ -29,8 +29,8 @@ namespace ConsoleTest
                     return;
                 }
                 RemoteHooking.Inject(processID, InjectionOptions.DoNotRequireStrongName,
-                    Defaults.CURRENT_DIR + Defaults.DLL_NAME, Defaults.CURRENT_DIR + Defaults.DLL_NAME,
-                    new Object[] {Defaults.CHANNEL_NAME});
+                    Defaults.CurrentDir + Defaults.DllName, Defaults.CurrentDir + Defaults.DllName,
+                    new Object[] {Defaults.ChannelName});
                 Console.ReadKey();
             }
             catch (Exception ExtInfo)
