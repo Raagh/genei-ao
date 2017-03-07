@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using AORNet.Configurations;
 using AORNet.Model;
 
 namespace AORNet.Helpers
@@ -10,11 +12,17 @@ namespace AORNet.Helpers
     public static class PacketsHelper
     {
         public static void AnalyzeHandlePackets(string packet)
-        {    
+        {
+
+            //
+            //// If the GameMaster is taking a screenshot of you
+            //
+            if (packet.StartsWith("PAIN"))
+                CheatingHelper.ClearConsole();
             //
             //// Checks if there is any Chest in the map
             //
-            if (packet.StartsWith(GamePackets.MapItem))
+            else if (packet.StartsWith(GamePackets.MapItem))
             {
                 string[] split = packet.Split(',');
                 string itemId = split[0];
@@ -110,12 +118,9 @@ namespace AORNet.Helpers
                 string[] split = packet.Split('L');
                 if (split[0] == "QD")
                 {
-                    //Character foundPlayerInAutoAim = charactersListInAutoAim.Find(x => x.id == int.Parse(split[1]));
-                    //Character foundPlayerInMap = charactersListInMap.Find(x => x.id == int.Parse(split[1]));
-                    ////Monster foundMonster = monstersListInMap.Find(x => x.ID == int.Parse(split[1]));
-                    //charactersListInAutoAim.Remove(foundPlayerInAutoAim);
-                    //charactersListInMap.Remove(foundPlayerInMap);
-                    ////monstersListInMap.Remove(foundMonster);
+                    int id = int.Parse(split[1]);
+                    Player foundPlayer = CheatingHelper.players.Find(x => x.ID == id);
+                    CheatingHelper.players.Remove(foundPlayer);
                 }
             }
             //
@@ -123,13 +128,56 @@ namespace AORNet.Helpers
             //
             else if (packet.StartsWith(GamePackets.CheaterExitMap)) 
             {
-                //charactersListInAutoAim.Clear();
-                //charactersListInMap.Clear();
-                ////monstersListInMap.Clear();
-                //selectedCharacter = 0;
-                //selectedName = string.Empty;
+                CheatingHelper.players.Clear();
             }
+            //
+            //// Players enter the map
+            //
+            else if (packet.StartsWith(GamePackets.PlayerEnterMap))  
+            {
+                string[] split = packet.Split(',');
+                if (split.Count() > 11)
+                {
+                    //Game master is in the Map                
+                    if (packet.Contains("Staff")) 
+                    {
+                        CheatingHelper.SendConsoleMessage("GM -> " + split[11] + " en X:" + split[4] + " Y:" + split[5]);
+                    }
+                    else if(!packet.Contains(GeneiConfiguration.PlayerName))
+                    {                 
+                        int id = int.Parse(split[3]);                    
+                        int posX = int.Parse(split[4]);
+                        int posY = int.Parse(split[5]);
+                        string name = split[11];
+                        Player.Factions faction = Player.Factions.Neutral;
+                        string playerClass = "";
+                        bool inRange = false;
+                        bool isParalized = false;
+                        bool isInvisible = split[13] == "1" ? true : false;
+                        bool isSelected =  false;
+                                          
+                        Player newPlayer = new Player(id,name,faction,playerClass,isParalized,isInvisible,posX,posY,inRange,isSelected);
+                        CheatingHelper.players.Add(newPlayer);                           
+                    }               
+                }
+            }
+            //
+            //// Players Movement
+            //
+            else if (packet.StartsWith(GamePackets.MovePlayer)) 
+            {
+                string[] split = packet.Split(',');
 
+                int id = int.Parse(split[0].Substring(2));
+
+                Player foundPlayer =  CheatingHelper.players.Find(x => x.ID == id);
+                if (foundPlayer != null)
+                {
+                    foundPlayer.PosX = int.Parse(split[1]);
+                    foundPlayer.PosY = int.Parse(split[2]);
+                    foundPlayer.InRange = true;
+                }
+            }
         }
 
         public static void AnalyzeSendPackets(string packet)

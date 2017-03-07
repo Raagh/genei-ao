@@ -102,10 +102,10 @@ namespace AORNet
         private static unsafe void HookedLoop()
         {
             try
-            {            
-                CheatingHelper.AutoPotas();
-                CheatingHelper.AutoRemo();
+            {                                      
+                CheatingHelper.AutoRemo();              
                 CheatingHelper.AutoAim();
+                //CheatingHelper.AutoPotas();
                 //CheatingHelper.SpeedHack();
             }
             catch (Exception ex)

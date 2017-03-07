@@ -14,6 +14,12 @@ namespace AORNet.Helpers
 {
     public static class CheatingHelper
     {
+        #region -- Locals --
+
+        public static List<Player> players = new List<Player>();
+
+        #endregion
+
         #region -- Imports --
 
         [DllImport("user32.dll")]
@@ -85,21 +91,30 @@ namespace AORNet.Helpers
 
         public static void AutoAim()
         {
-            //if (GetAsyncKeyState(LibraryConfiguration.ApocaKey) == -32767) 
-            //    CastSpell(Cheater.Configuration.ApocaPosition,posX,posY);
-
-            //if (GetAsyncKeyState(LibraryConfiguration.DescargaKey) == -32767)
-            //    CastSpell(Cheater.Configuration.DescargaPosition, posX, posY);
-
-            //if (GetAsyncKeyState(LibraryConfiguration.InmoKey) == -32767) 
-            //    CastSpell(Cheater.Configuration.InmoPosition, posX, posY);
-
-            //if (GetAsyncKeyState(LibraryConfiguration.TormentaKey) == -32767)
-            //    CastSpell(Cheater.Configuration.TormentaPosition, posX, posY);
-
-            if (GetAsyncKeyState(LibraryConfiguration.RemoKey) == -32767)
+            if (GetAsyncKeyState(GeneiConfiguration.SwitchPlayerAutoAimKey) == -32767)
+                SwitchPlayerInAutoAim();
+            else if (GetAsyncKeyState(GeneiConfiguration.RemoKey) == -32767)
                 CastSpell(Cheater.Configuration.RemoPosition, Cheater.Instance.PosX, Cheater.Instance.PosY);
-
+            else
+            {
+                Player selectedPlayer = players.Find(x => x.IsSelected);
+                if (GetAsyncKeyState(GeneiConfiguration.ApocaKey) == -32767)
+                {
+                    CastSpell(Cheater.Configuration.ApocaPosition, selectedPlayer.PosX, selectedPlayer.PosY);
+                }
+                else if (GetAsyncKeyState(GeneiConfiguration.DescargaKey) == -32767)
+                {
+                    CastSpell(Cheater.Configuration.DescargaPosition, selectedPlayer.PosX, selectedPlayer.PosY);
+                }
+                else if (GetAsyncKeyState(GeneiConfiguration.InmoKey) == -32767)
+                {
+                    CastSpell(Cheater.Configuration.InmoPosition, selectedPlayer.PosX, selectedPlayer.PosY);
+                }
+                else if (GetAsyncKeyState(GeneiConfiguration.TormentaKey) == -32767)
+                {
+                    CastSpell(Cheater.Configuration.TormentaPosition, selectedPlayer.PosX, selectedPlayer.PosY);
+                }           
+            }                       
         }
 
         public static void BorrarCartel()
@@ -115,7 +130,8 @@ namespace AORNet.Helpers
         {
             PacketsHelper.SendToServer(GamePackets.CastSpell + spellPosition);
             PacketsHelper.SendToServer(GamePackets.IntermediateCastSpell);
-            PacketsHelper.SendToServer(GamePackets.ThrowSpell + "," + posX + "," + (posY - 1) + "," + 1);            
+            PacketsHelper.SendToServer(GamePackets.ThrowSpell + posX + "," + (posY - 1) + ",1");
+            SendConsoleMessage("You casted tormenta on PosX:" + posX + " PosY:" + posY);
         }
 
         public static void SendConsoleMessage(string message)
@@ -129,6 +145,41 @@ namespace AORNet.Helpers
             {
                 SendConsoleMessage("||            ~10~236~18~0~0");
             }
+        }
+
+        public static void SwitchPlayerInAutoAim()
+        {
+            List<Player> playersInRange = players.FindAll(x => x.InRange);
+
+            if (playersInRange.Any())
+            {
+                Player selectedPlayer = playersInRange.Find(x => x.IsSelected);
+
+                if (selectedPlayer != null && selectedPlayer != playersInRange.Last())
+                {
+                    var index = playersInRange.IndexOf(selectedPlayer);
+                    Player nextPlayer = playersInRange[index + 1];
+                    selectedPlayer.IsSelected = false;
+                    nextPlayer.IsSelected = true;
+                    SendConsoleMessage("Selected1 player is: " + selectedPlayer.Name);
+                }
+                else if (selectedPlayer != null && selectedPlayer == playersInRange.Last())
+                {
+                    selectedPlayer.IsSelected = false;
+                    playersInRange.First().IsSelected = true;
+                    SendConsoleMessage("Selected2 player is: " + selectedPlayer.Name);
+                }
+                else if (selectedPlayer == null)
+                {
+                    playersInRange.First().IsSelected = true;
+                    SendConsoleMessage("Selected3 player is: " + playersInRange.First().Name);
+                }
+            }
+            else if (!playersInRange.Any())
+            {
+                SendConsoleMessage("No characters in range!");
+            }
+
         }
 
         #endregion

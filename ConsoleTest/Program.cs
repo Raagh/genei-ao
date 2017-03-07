@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Runtime.Remoting;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,16 @@ namespace ConsoleTest
 {
     class Program
     {
+
+        [DllImport("kernel32.dll")]
+        static extern IntPtr GetConsoleWindow();
+
+        [DllImport("user32.dll")]
+        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        const int SW_HIDE = 0;
+        const int SW_SHOW = 5;
+
         static void Main(string[] args)
         {
             var argentumProcess = Process.Start("D:\\FuriusAO\\FuriusAO.exe");
@@ -31,6 +42,12 @@ namespace ConsoleTest
                 RemoteHooking.Inject(processID, InjectionOptions.DoNotRequireStrongName,
                     Defaults.CurrentDir + Defaults.DllName, Defaults.CurrentDir + Defaults.DllName,
                     new Object[] {Defaults.ChannelName});
+
+                var handle = GetConsoleWindow();
+
+                // Hide
+                ShowWindow(handle, SW_HIDE);
+
                 Console.ReadKey();
             }
             catch (Exception ExtInfo)

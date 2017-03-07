@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configurations\GeneiConfiguration.cs" />
     <Compile Include="Helpers\CheatingHelper.cs" />
     <Compile Include="Helpers\MemoryHelper.cs" />
     <Compile Include="Helpers\PacketsHelper.cs" />
