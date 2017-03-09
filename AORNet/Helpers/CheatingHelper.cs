@@ -161,19 +161,18 @@ namespace AORNet.Helpers
                     Player nextPlayer = playersInRange[index + 1];
                     selectedPlayer.IsSelected = false;
                     nextPlayer.IsSelected = true;
-                    SendConsoleMessage("Selected1 player is: " + selectedPlayer.Name);
                 }
                 else if (selectedPlayer != null && selectedPlayer == playersInRange.Last())
                 {
                     selectedPlayer.IsSelected = false;
                     playersInRange.First().IsSelected = true;
-                    SendConsoleMessage("Selected2 player is: " + selectedPlayer.Name);
                 }
                 else if (selectedPlayer == null)
                 {
                     playersInRange.First().IsSelected = true;
-                    SendConsoleMessage("Selected3 player is: " + playersInRange.First().Name);
+                    selectedPlayer = playersInRange.First();
                 }
+                SendConsoleMessage("Selected player is: " + selectedPlayer.Name);
             }
             else if (!playersInRange.Any())
             {
