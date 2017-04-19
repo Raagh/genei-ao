@@ -41,15 +41,15 @@ namespace AORNet.Helpers
                 string[] split = packet.Split(',');
                 string inventoryPosition = split[0].Substring(3);
                 string itemId = split[4];
-                if (itemId.Contains(GeneiConfiguration.RedPotionId))
+                if (itemId.Contains(AOConfiguration.RedPotionId))
                 {
                     Cheater.Configuration.RedPotionPosition = inventoryPosition;
                 }
-                else if (itemId.Contains(GeneiConfiguration.BluePotionId))
+                else if (itemId.Contains(AOConfiguration.BluePotionId))
                 {
                     Cheater.Configuration.BluePotionPosition = inventoryPosition;
                 }
-                else if (itemId.Contains(GeneiConfiguration.YellowPotionId))
+                else if (itemId.Contains(AOConfiguration.YellowPotionId))
                 {
                     Cheater.Configuration.YellowPotionPosition = inventoryPosition;
                 }
@@ -167,7 +167,7 @@ namespace AORNet.Helpers
                     {
                         CheatingHelper.SendConsoleMessage("GM -> " + split[11] + " en X:" + split[4] + " Y:" + split[5]);
                     }
-                    else if(!packet.Contains(GeneiConfiguration.PlayerName))
+                    else if(!packet.Contains(AOConfiguration.PlayerName))
                     {                 
                         int id = int.Parse(split[3]);                    
                         int posX = int.Parse(split[4]);
