@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AORNet.Configurations;
@@ -31,32 +32,18 @@ namespace AORNet.Helpers
 
         public static void AutoPotas()
         {
-            if (LibraryConfiguration.IsProcessOpen)
+            if (Cheater.ActualLife != 0)
             {
-                int maxLife = MemoryHelper.Read(LibraryConfiguration.ProcessHandle, LibraryConfiguration.StructAddress);
-                int actualLife = MemoryHelper.Read(LibraryConfiguration.ProcessHandle, LibraryConfiguration.StructAddress + 4);
-                int maxMana = MemoryHelper.Read(LibraryConfiguration.ProcessHandle, LibraryConfiguration.StructAddress + 8);
-                int actualMana = MemoryHelper.Read(LibraryConfiguration.ProcessHandle, LibraryConfiguration.StructAddress + 12);
-
-                if (actualLife != 0)
+                if (Cheater.ActualLife != Cheater.MaxLife)
                 {
-                    if (actualLife != maxLife)
-                    {
-                        PacketsHelper.SendToServer(GamePackets.UseItemClick + PacketsHelper.Encrypt(Cheater.Configuration.RedPotionPosition));
-                        PacketsHelper.SendToServer(GamePackets.UseItemKey + PacketsHelper.Encrypt(Cheater.Configuration.RedPotionPosition));
-                    }
-                    else if (actualMana != maxMana)
-                    {
-                        PacketsHelper.SendToServer(GamePackets.UseItemClick + PacketsHelper.Encrypt(Cheater.Configuration.BluePotionPosition));
-                        PacketsHelper.SendToServer(GamePackets.UseItemKey + PacketsHelper.Encrypt(Cheater.Configuration.BluePotionPosition));
-                    }
+                    //PacketsHelper.SendToServer(GamePackets.UseItemClick + PacketsHelper.Encrypt(Cheater.Configuration.RedPotionPosition));
+                    PacketsHelper.SendToServer(GamePackets.UseItemKey + PacketsHelper.Encrypt(Cheater.Configuration.RedPotionPosition));
                 }
-            }
-            else
-            {
-                LibraryConfiguration.IsProcessOpen = MemoryHelper.IsProcessOpen(LibraryConfiguration.ServerName);
-                LibraryConfiguration.AOProcess = Process.GetProcessesByName(LibraryConfiguration.ServerName)[0];
-                LibraryConfiguration.ProcessHandle = MemoryHelper.OpenProcess(LibraryConfiguration.OpenForReading, false, LibraryConfiguration.AOProcess.Id);
+                else if (Cheater.ActualMana != Cheater.MaxMana)
+                {
+                    //PacketsHelper.SendToServer(GamePackets.UseItemClick + PacketsHelper.Encrypt(Cheater.Configuration.BluePotionPosition));
+                    PacketsHelper.SendToServer(GamePackets.UseItemKey + PacketsHelper.Encrypt(Cheater.Configuration.BluePotionPosition));
+                }           
             }
         }
 
@@ -131,7 +118,6 @@ namespace AORNet.Helpers
             PacketsHelper.SendToServer(GamePackets.CastSpell + spellPosition);
             PacketsHelper.SendToServer(GamePackets.IntermediateCastSpell);
             PacketsHelper.SendToServer(GamePackets.ThrowSpell + posX + "," + (posY - 1) + ",1");
-            SendConsoleMessage("You casted tormenta on PosX:" + posX + " PosY:" + posY);
         }
 
         public static void SendConsoleMessage(string message)
@@ -149,6 +135,8 @@ namespace AORNet.Helpers
 
         public static void SwitchPlayerInAutoAim()
         {
+            //TODO Arreglar el autoaim - el seleccionar player esta ADELANTADO al MSJ
+
             List<Player> playersInRange = players.FindAll(x => x.InRange);
 
             if (playersInRange.Any())
@@ -178,7 +166,6 @@ namespace AORNet.Helpers
             {
                 SendConsoleMessage("No characters in range!");
             }
-
         }
 
         #endregion

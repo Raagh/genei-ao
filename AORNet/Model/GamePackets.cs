@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace AORNet.Model
 {
@@ -19,12 +20,14 @@ namespace AORNet.Model
         public const string CheaterParalized = "P9";
         public const string CheaterRemoved = "P8";
         public const string CheaterExitMap = "CM";
+        public const string CheaterUpdateLife = "5A";
+        public const string CheaterStatus = "EST";
         public const string InventorySpell = "SHS";
         public const string InventoryItem = "CSI";
         public const string MapItem = "HO";
         public const string MapItemTreasureId = "24078";
         public const string GmTakingPicture = "PAIN";
-
+        
         #endregion
 
         #region -- Send Packets --

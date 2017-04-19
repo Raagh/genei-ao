@@ -14,5 +14,10 @@ namespace AORNet.Model
         public static Cheater Instance => _instance ?? (_instance = new Cheater());
 
         public static CheaterConfiguration Configuration = new CheaterConfiguration();
+
+        public static int MaxLife { get; set; } = 0;
+        public static int ActualLife { get; set; } = 0;
+        public static int MaxMana { get; set; } = 0;
+        public static int ActualMana { get; set; } = 0;
     }
 }

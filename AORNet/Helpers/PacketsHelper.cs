@@ -17,7 +17,7 @@ namespace AORNet.Helpers
             //
             //// If the GameMaster is taking a screenshot of you
             //
-            if (packet.StartsWith("PAIN"))
+            if (packet.StartsWith(GamePackets.GmTakingPicture))
                 CheatingHelper.ClearConsole();
             //
             //// Checks if there is any Chest in the map
@@ -40,19 +40,43 @@ namespace AORNet.Helpers
             {
                 string[] split = packet.Split(',');
                 string inventoryPosition = split[0].Substring(3);
-                string itemName = split[1];
-                if (itemName.Contains("roja"))
+                string itemId = split[4];
+                if (itemId.Contains(GeneiConfiguration.RedPotionId))
                 {
                     Cheater.Configuration.RedPotionPosition = inventoryPosition;
                 }
-                else if (itemName.Contains("azul"))
+                else if (itemId.Contains(GeneiConfiguration.BluePotionId))
                 {
                     Cheater.Configuration.BluePotionPosition = inventoryPosition;
                 }
-                else if (itemName.Contains("amarilla"))
+                else if (itemId.Contains(GeneiConfiguration.YellowPotionId))
                 {
                     Cheater.Configuration.YellowPotionPosition = inventoryPosition;
                 }
+            }
+            //
+            //// Updates player Status
+            //
+            else if (packet.StartsWith(GamePackets.CheaterStatus))
+            {
+                string[] split = packet.Split(',');
+                int maxLife = int.Parse(split[0].Substring(3));
+                int actualLife = int.Parse(split[1]);
+                int maxMana = int.Parse(split[2]);
+                int actualMana = int.Parse(split[3]);
+
+                Cheater.MaxLife = maxLife;
+                Cheater.ActualLife = actualLife;
+                Cheater.MaxMana = maxMana;
+                Cheater.ActualMana = actualMana;
+            }
+            //
+            //// Updates player life
+            //
+            else if (packet.StartsWith(GamePackets.CheaterUpdateLife))
+            {
+                int actualLife = int.Parse(packet.Substring(2));
+                Cheater.ActualLife = actualLife;
             }
             //
             //// Gets the spells positions in the inventory

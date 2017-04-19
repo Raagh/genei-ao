@@ -30,9 +30,9 @@ namespace AORNet
 
         #region -- Static Properties --
 
-        private static readonly IntPtr HandleAddress = new IntPtr(0x64E050);
-        private static readonly IntPtr SendAddress = new IntPtr(0x69A0D0);
-        private static readonly IntPtr EncryptAddress = new IntPtr(0x6EB960);
+        private static readonly IntPtr HandleAddress = new IntPtr(0x64E550);
+        private static readonly IntPtr SendAddress = new IntPtr(0x69A5D0);
+        private static readonly IntPtr EncryptAddress = new IntPtr(0x6EBD10);
         private static readonly IntPtr LoopAddress = LocalHook.GetProcAddress("MSVBVM60.DLL", "rtcDoEvents");
 
         #endregion
@@ -102,10 +102,12 @@ namespace AORNet
         private static unsafe void HookedLoop()
         {
             try
-            {                                      
-                CheatingHelper.AutoRemo();              
+            {       
+                //TODO Revisar poner en distintos Threads para poder tomar potas y usar el AutoAim   
+                                            
+                //CheatingHelper.AutoRemo();              
                 CheatingHelper.AutoAim();
-                //CheatingHelper.AutoPotas();
+                CheatingHelper.AutoPotas();
                 //CheatingHelper.SpeedHack();
             }
             catch (Exception ex)

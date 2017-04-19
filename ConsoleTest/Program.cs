@@ -46,7 +46,7 @@ namespace ConsoleTest
                 var handle = GetConsoleWindow();
 
                 // Hide
-                ShowWindow(handle, SW_HIDE);
+                //ShowWindow(handle, SW_HIDE);
 
                 Console.ReadKey();
             }

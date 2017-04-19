@@ -15,6 +15,5 @@ namespace AORNet.Configurations
         public static Keys TormentaKey = Keys.PageDown;
         public static Keys RemoKey = Keys.End;
         public static Keys SwitchPlayerAutoAimKey = Keys.RButton;
-        public static string PlayerName { get; set; } = "Vilkas";
     }
 }
