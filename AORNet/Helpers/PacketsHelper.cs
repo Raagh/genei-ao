@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AORNet.Configurations;
 using AORNet.Model;
+using EasyHook;
 
 namespace AORNet.Helpers
 {
@@ -59,16 +60,21 @@ namespace AORNet.Helpers
             //
             else if (packet.StartsWith(GamePackets.CheaterStatus))
             {
-                string[] split = packet.Split(',');
-                int maxLife = int.Parse(split[0].Substring(3));
-                int actualLife = int.Parse(split[1]);
-                int maxMana = int.Parse(split[2]);
-                int actualMana = int.Parse(split[3]);
+                string decryptedPacket = Decrypt(packet.Substring(3));
 
-                Cheater.MaxLife = maxLife;
-                Cheater.ActualLife = actualLife;
-                Cheater.MaxMana = maxMana;
-                Cheater.ActualMana = actualMana;
+                if (!String.IsNullOrEmpty(decryptedPacket))
+                {
+                    string[] split = decryptedPacket.Split(',');
+                    int maxLife = int.Parse(split[0]);
+                    int actualLife = int.Parse(split[1]);
+                    int maxMana = int.Parse(split[2]);
+                    int actualMana = int.Parse(split[3]);
+
+                    Cheater.MaxLife = maxLife;
+                    Cheater.ActualLife = actualLife;
+                    Cheater.MaxMana = maxMana;
+                    Cheater.ActualMana = actualMana;
+                }
             }
             //
             //// Updates player life
@@ -224,7 +230,7 @@ namespace AORNet.Helpers
 
         public static void SendToClient(string packet)
         {
-            Main.PHandleData(packet);
+            Main.PHandleData(packet);   
         }
 
         public static void SendToServer(string packet)
@@ -234,7 +240,26 @@ namespace AORNet.Helpers
 
         public static string Encrypt(string message)
         {
-            return Main.PEncryptData(message);
+            return Main.PEncryptData(message);    
+        }
+
+        public static string Decrypt(string message)
+        {
+            var token1 = message[message.Length - 1] - 0xA;
+            var token2 = message[message.Length - 2] - 0xA;
+
+            string strKey = new string(new char[] { (char)token2, (char)token1 });
+
+            var key = int.Parse(strKey);      
+            string decryptedPacket = "";
+
+            for (int i = 0; i < message.Length - 2; ++i)
+            {
+                decryptedPacket += (char)(message[i] - key);
+            }
+
+            return decryptedPacket;
+
         }
 
     }

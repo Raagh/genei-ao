@@ -22,7 +22,7 @@ namespace AORNet
         private LocalHook HandleHook;
         private LocalHook SendHook;
         private LocalHook LoopHook;
-        private LocalHook EncriptHook;
+        private LocalHook EncryptHook;
         public static string ChannelName;
         public readonly RemoteService Interface;
 
@@ -30,9 +30,10 @@ namespace AORNet
 
         #region -- Static Properties --
 
-        private static readonly IntPtr HandleAddress = new IntPtr(0x64E550);
-        private static readonly IntPtr SendAddress = new IntPtr(0x69A5D0);
-        private static readonly IntPtr EncryptAddress = new IntPtr(0x6EBD10);
+        private static readonly IntPtr HandleAddress = new IntPtr(0x64E480);
+        private static readonly IntPtr SendAddress = new IntPtr(0x69A6D0);
+        private static readonly IntPtr EncryptAddress = new IntPtr(0x6EBE20);
+
         private static readonly IntPtr LoopAddress = LocalHook.GetProcAddress("MSVBVM60.DLL", "rtcDoEvents");
 
         #endregion
@@ -49,13 +50,18 @@ namespace AORNet
         [return: MarshalAs(UnmanagedType.BStr)]
         public unsafe delegate string EncryptData([MarshalAs(UnmanagedType.BStr)] string data);
 
+
+
         [UnmanagedFunctionPointer(CallingConvention.StdCall, SetLastError = true)]
         public unsafe delegate void Loop();
 
         public static readonly HandleData PHandleData = (HandleData)Marshal.GetDelegateForFunctionPointer(HandleAddress, typeof(HandleData));
         public static readonly SendData PSendData = (SendData)Marshal.GetDelegateForFunctionPointer(SendAddress, typeof(SendData));
         public static readonly Loop PLoop = (Loop)Marshal.GetDelegateForFunctionPointer(LoopAddress, typeof(Loop));
-        public static readonly EncryptData PEncryptData = (EncryptData) Marshal.GetDelegateForFunctionPointer(EncryptAddress, typeof(EncryptData));
+        public static readonly EncryptData PEncryptData = (EncryptData)Marshal.GetDelegateForFunctionPointer(EncryptAddress, typeof(EncryptData));
+
+
+
 
         #endregion
 
@@ -72,11 +78,11 @@ namespace AORNet
             }
             catch (Exception ex)
             {
-                ((Main)HookRuntimeInfo.Callback).Interface.ErrorHandler(ex);
+                //((Main)HookRuntimeInfo.Callback).Interface.ErrorHandler(ex);
             }
             finally
             {
-                PHandleData(packet);
+                PHandleData(packet);   
             }
         }
 
@@ -105,8 +111,8 @@ namespace AORNet
             {       
                 //TODO Revisar poner en distintos Threads para poder tomar potas y usar el AutoAim   
                                             
-                //CheatingHelper.AutoRemo();              
-                CheatingHelper.AutoAim();
+                //CheatingHelper.AutoRemo();    
+                //CheatingHelper.AutoAim();
                 CheatingHelper.AutoPotas();
                 //CheatingHelper.SpeedHack();
             }
@@ -116,22 +122,14 @@ namespace AORNet
             }
             finally
             {
-                PLoop();
+               PLoop();
             }
         }
 
         [return: MarshalAs(UnmanagedType.BStr)]
         private static unsafe string HookedEncrypt([MarshalAs(UnmanagedType.BStr)] string packet)
         {
-            try
-            {
-                //((Main)HookRuntimeInfo.Callback).Interface.Message("Encrypt= " + packet);
-            }
-            catch (Exception ex)
-            {
-                ((Main)HookRuntimeInfo.Callback).Interface.ErrorHandler(ex);
-            }
-
+            //((Main)HookRuntimeInfo.Callback).Interface.Message("Encrypt= " + packet);
             return PEncryptData(packet);
         }
 
@@ -162,8 +160,8 @@ namespace AORNet
                 SendHook.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
                 LoopHook = LocalHook.Create(LoopAddress, new Loop(HookedLoop), this);
                 LoopHook.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
-                EncriptHook = LocalHook.Create(EncryptAddress, new EncryptData(HookedEncrypt), this);
-                EncriptHook.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
+                EncryptHook = LocalHook.Create(EncryptAddress, new EncryptData(HookedEncrypt), this);
+                EncryptHook.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
 
                 while (true)
                 {

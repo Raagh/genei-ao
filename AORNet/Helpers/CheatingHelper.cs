@@ -43,7 +43,7 @@ namespace AORNet.Helpers
                 {
                     //PacketsHelper.SendToServer(GamePackets.UseItemClick + PacketsHelper.Encrypt(Cheater.Configuration.BluePotionPosition));
                     PacketsHelper.SendToServer(GamePackets.UseItemKey + PacketsHelper.Encrypt(Cheater.Configuration.BluePotionPosition));
-                }           
+                }
             }
         }
 

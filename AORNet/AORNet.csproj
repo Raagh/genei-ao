@@ -54,6 +54,7 @@
     <Compile Include="Model\Cheater.cs" />
     <Compile Include="Model\GamePackets.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="Model\Packet.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Configurations\CheaterConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
