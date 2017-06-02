@@ -12,6 +12,9 @@ namespace AORNet.Helpers
 {
     public static class PacketsHelper
     {
+
+        public static Stack<Packet> PacketsStack = new Stack<Packet>();
+
         public static void AnalyzeHandlePackets(string packet)
         {
 
@@ -238,6 +241,12 @@ namespace AORNet.Helpers
             Main.PSendData(ref packet);
         }
 
+        public static void SendPacketToStack(string packetContent, PacketDirection direction)
+        {
+            var packet = new Packet(packetContent,direction);
+            PacketsStack.Push(packet);
+        }
+
         public static string Encrypt(string message)
         {
             return Main.PEncryptData(message);    
@@ -251,7 +260,7 @@ namespace AORNet.Helpers
             string strKey = new string(new char[] { (char)token2, (char)token1 });
 
             var key = int.Parse(strKey);      
-            string decryptedPacket = "";
+            string decryptedPacket = string.Empty;
 
             for (int i = 0; i < message.Length - 2; ++i)
             {

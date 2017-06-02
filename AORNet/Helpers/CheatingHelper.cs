@@ -59,54 +59,59 @@ namespace AORNet.Helpers
         {
             if (GetAsyncKeyState(Keys.Up) == -32767)
             {
-                PacketsHelper.SendToServer(GamePackets.MoveUp);
+                PacketsHelper.SendPacketToStack(GamePackets.MoveUp,PacketDirection.ToServer);
             }
             else if (GetAsyncKeyState(Keys.Down) == -32767)
             {
-                PacketsHelper.SendToServer(GamePackets.MoveDown);
+                PacketsHelper.SendPacketToStack(GamePackets.MoveDown, PacketDirection.ToServer);
             }
             else if (GetAsyncKeyState(Keys.Left) == -32767)
             {
-                PacketsHelper.SendToServer(GamePackets.MoveLeft);
+                PacketsHelper.SendPacketToStack(GamePackets.MoveLeft, PacketDirection.ToServer);
             }
             else if (GetAsyncKeyState(Keys.Right) == -32767)
             {
-                PacketsHelper.SendToServer(GamePackets.MoveRight);
+                PacketsHelper.SendPacketToStack(GamePackets.MoveRight, PacketDirection.ToServer);
             }
-            PacketsHelper.SendToServer(GamePackets.RestartPositionUser);
+            PacketsHelper.SendPacketToStack(GamePackets.RestartPositionUser, PacketDirection.ToServer);
         }
 
         public static void AutoAim()
         {
-            if (GetAsyncKeyState(GeneiConfiguration.SwitchPlayerAutoAimKey) == -32767)
-                SwitchPlayerInAutoAim();
-            else if (GetAsyncKeyState(GeneiConfiguration.RemoKey) == -32767)
-                CastSpell(Cheater.Configuration.RemoPosition, Cheater.Instance.PosX, Cheater.Instance.PosY);
-            else
+            while (true)
             {
-                Player selectedPlayer = players.Find(x => x.IsSelected);
-                if (GetAsyncKeyState(GeneiConfiguration.ApocaKey) == -32767)
+                Thread.Sleep(400);
+
+                if (GetAsyncKeyState(GeneiConfiguration.SwitchPlayerAutoAimKey) == -32767)
+                    SwitchPlayerInAutoAim();
+                else if (GetAsyncKeyState(GeneiConfiguration.RemoKey) == -32767)
+                    CastSpell(Cheater.Configuration.RemoPosition, Cheater.Instance.PosX, Cheater.Instance.PosY);
+                else
                 {
-                    CastSpell(Cheater.Configuration.ApocaPosition, selectedPlayer.PosX, selectedPlayer.PosY);
+                    Player selectedPlayer = players.Find(x => x.IsSelected);
+                    if (GetAsyncKeyState(GeneiConfiguration.ApocaKey) == -32767)
+                    {
+                        CastSpell(Cheater.Configuration.ApocaPosition, selectedPlayer.PosX, selectedPlayer.PosY);
+                    }
+                    else if (GetAsyncKeyState(GeneiConfiguration.DescargaKey) == -32767)
+                    {
+                        CastSpell(Cheater.Configuration.DescargaPosition, selectedPlayer.PosX, selectedPlayer.PosY);
+                    }
+                    else if (GetAsyncKeyState(GeneiConfiguration.InmoKey) == -32767)
+                    {
+                        CastSpell(Cheater.Configuration.InmoPosition, selectedPlayer.PosX, selectedPlayer.PosY);
+                    }
+                    else if (GetAsyncKeyState(GeneiConfiguration.TormentaKey) == -32767)
+                    {
+                        CastSpell(Cheater.Configuration.TormentaPosition, selectedPlayer.PosX, selectedPlayer.PosY);
+                    }
                 }
-                else if (GetAsyncKeyState(GeneiConfiguration.DescargaKey) == -32767)
-                {
-                    CastSpell(Cheater.Configuration.DescargaPosition, selectedPlayer.PosX, selectedPlayer.PosY);
-                }
-                else if (GetAsyncKeyState(GeneiConfiguration.InmoKey) == -32767)
-                {
-                    CastSpell(Cheater.Configuration.InmoPosition, selectedPlayer.PosX, selectedPlayer.PosY);
-                }
-                else if (GetAsyncKeyState(GeneiConfiguration.TormentaKey) == -32767)
-                {
-                    CastSpell(Cheater.Configuration.TormentaPosition, selectedPlayer.PosX, selectedPlayer.PosY);
-                }           
-            }                       
+            }               
         }
 
         public static void BorrarCartel()
         {
-            PacketsHelper.SendToServer(GamePackets.CleanCartel);
+            PacketsHelper.SendPacketToStack(GamePackets.CleanCartel,PacketDirection.ToServer);
         }
 
         #endregion
@@ -115,14 +120,14 @@ namespace AORNet.Helpers
 
         public static void CastSpell(string spellPosition, int posX, int posY)
         {
-            PacketsHelper.SendToServer(GamePackets.CastSpell + spellPosition);
-            PacketsHelper.SendToServer(GamePackets.IntermediateCastSpell);
-            PacketsHelper.SendToServer(GamePackets.ThrowSpell + posX + "," + (posY - 1) + ",1");
+            PacketsHelper.SendPacketToStack(GamePackets.CastSpell + spellPosition,PacketDirection.ToServer);
+            PacketsHelper.SendPacketToStack(GamePackets.IntermediateCastSpell, PacketDirection.ToServer);
+            PacketsHelper.SendPacketToStack(GamePackets.ThrowSpell + posX + "," + (posY - 1) + ",1", PacketDirection.ToServer);
         }
 
         public static void SendConsoleMessage(string message)
         {
-            PacketsHelper.SendToClient("||GeneiAO>" + message + "~10~236~18~0~0");
+            PacketsHelper.SendPacketToStack("||GeneiAO>" + message + "~10~236~18~0~0",PacketDirection.ToClient);
         }
 
         public static void ClearConsole()
